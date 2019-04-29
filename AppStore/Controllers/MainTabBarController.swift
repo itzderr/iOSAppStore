@@ -11,7 +11,7 @@ import UIKit
 class MainTabBarController: UITabBarController {
   override func viewDidLoad() {
     super.viewDidLoad()
-  
+    
     viewControllers = [
       createViewController(viewController: UIViewController(), title: "Today", imageName: "today"),
       createViewController(viewController: UIViewController(), title: "Games", imageName: "games"),
