@@ -15,6 +15,8 @@
 		4E405734227268340030AC2D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E405733227268340030AC2D /* SearchViewController.swift */; };
 		4EBB797222779B20007C976D /* SearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB797122779B20007C976D /* SearchCollectionViewCell.swift */; };
 		4EBB79772277B733007C976D /* UIView+ConstraintLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB79762277B733007C976D /* UIView+ConstraintLayout.swift */; };
+		4EBB797A2277BC3A007C976D /* SearchResultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB79792277BC3A007C976D /* SearchResultApp.swift */; };
+		4EBD971A2277CB3700BD9F50 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD97192277CB3700BD9F50 /* APIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		4E405733227268340030AC2D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		4EBB797122779B20007C976D /* SearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		4EBB79762277B733007C976D /* UIView+ConstraintLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ConstraintLayout.swift"; sourceTree = "<group>"; };
+		4EBB79792277BC3A007C976D /* SearchResultApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultApp.swift; sourceTree = "<group>"; };
+		4EBD97192277CB3700BD9F50 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +64,10 @@
 		4E40571A22718C630030AC2D /* AppStore */ = {
 			isa = PBXGroup;
 			children = (
+				4EBD97182277CB2900BD9F50 /* Services */,
 				4EBB79732277B6F9007C976D /* HelperExtensions */,
 				4E405736227268C70030AC2D /* Supporting Files */,
+				4EBB79782277BBD6007C976D /* Models */,
 				4EBB797022779ADF007C976D /* Views */,
 				4E4057352272686D0030AC2D /* Controllers */,
 				4E40572722718C6B0030AC2D /* Info.plist */,
@@ -103,6 +109,22 @@
 				4EBB79762277B733007C976D /* UIView+ConstraintLayout.swift */,
 			);
 			path = HelperExtensions;
+			sourceTree = "<group>";
+		};
+		4EBB79782277BBD6007C976D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4EBB79792277BC3A007C976D /* SearchResultApp.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4EBD97182277CB2900BD9F50 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4EBD97192277CB3700BD9F50 /* APIService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,9 +199,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E40571C22718C630030AC2D /* AppDelegate.swift in Sources */,
+				4EBD971A2277CB3700BD9F50 /* APIService.swift in Sources */,
 				4E405734227268340030AC2D /* SearchViewController.swift in Sources */,
 				4EBB797222779B20007C976D /* SearchCollectionViewCell.swift in Sources */,
 				4E40573222725F0E0030AC2D /* MainTabBarController.swift in Sources */,
+				4EBB797A2277BC3A007C976D /* SearchResultApp.swift in Sources */,
 				4EBB79772277B733007C976D /* UIView+ConstraintLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
