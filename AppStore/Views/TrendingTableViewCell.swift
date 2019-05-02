@@ -14,7 +14,7 @@ class TrendingTableViewCell: UITableViewCell {
   
   let nameLabel: UILabel = {
     let lb = UILabel(fontSize: 20, bold: false)
-    lb.textColor = UIColor(red: 0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+    lb.textColor = .systemBlue
     // default height: 44
     lb.heightAnchor.constraint(equalToConstant: 44).isActive = true
     return lb
@@ -36,6 +36,10 @@ class TrendingTableViewCell: UITableViewCell {
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  override func setSelected(_ selected: Bool, animated: Bool) {
+    super.setSelected(false, animated: animated)
   }
   
 }

@@ -11,13 +11,29 @@ import UIKit
 class SearchFinalCollectionViewCell: UICollectionViewCell {
   
   // MARK: - Properties
+  var resultApp: ResultApp! {
+    didSet {
+      nameLabel.text = resultApp.trackName
+      categoryLabel.text = resultApp.primaryGenreName
+      ratingsLabel.text = "Ratings: \(resultApp.averageUserRating ?? 0)"
+      
+      iconImageView.sd_setImage(with: URL(string: resultApp.artworkUrl100))
+      screenshot1ImageView.sd_setImage(with: URL(string: resultApp.screenshotUrls[0]))
+      if resultApp.screenshotUrls.count > 1 {
+        screenshot2ImageView.sd_setImage(with: URL(string: resultApp.screenshotUrls[1]))
+      }
+      if resultApp.screenshotUrls.count > 2 {
+        screenshot3ImageView.sd_setImage(with: URL(string: resultApp.screenshotUrls[2]))
+      }
+    }
+  }
   
   let iconImageView: UIImageView = {
     let iv = UIImageView()
-    iv.backgroundColor = .blue
     iv.widthAnchor.constraint(equalToConstant: 64).isActive = true
     iv.heightAnchor.constraint(equalToConstant: 64).isActive = true
-    iv.layer.cornerRadius = 12
+    iv.layer.cornerRadius = 16
+    iv.clipsToBounds = true
     return iv
   }()
   
@@ -42,7 +58,7 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   let getButton: UIButton = {
     let butt = UIButton(type: .system)
     butt.setTitle("GET", for: .normal)
-    butt.setTitleColor(.blue, for: .normal)
+    butt.setTitleColor(.systemBlue, for: .normal)
     butt.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
     butt.backgroundColor = UIColor(white: 0.95, alpha: 1)
     butt.widthAnchor.constraint(equalToConstant: 80).isActive = true
@@ -59,8 +75,11 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   
   fileprivate func createScreenShotImageView() -> UIImageView {
     let iv = UIImageView()
-    iv.backgroundColor = .green
     iv.layer.cornerRadius = 8
+    iv.clipsToBounds = true
+    iv.layer.borderWidth = 0.5
+    iv.layer.borderColor = UIColor(white: 0.5, alpha: 0.5).cgColor
+    iv.contentMode = .scaleAspectFill
     return iv
   }
   

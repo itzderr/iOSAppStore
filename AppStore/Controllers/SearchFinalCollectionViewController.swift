@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class SearchFinalCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
   
@@ -70,10 +71,9 @@ class SearchFinalCollectionViewController: UICollectionViewController, UICollect
     // downcasting (UICollectionViewCell -> SearchCollectionViewCell)
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchFinalCollectionViewCell
     
-    let resultApp = searchResults[indexPath.item]
-    cell.nameLabel.text = resultApp.trackName
-    cell.categoryLabel.text = resultApp.primaryGenreName
-    cell.ratingsLabel.text = "Ratings: \(resultApp.averageUserRating ?? 0)"
+    cell.resultApp = searchResults[indexPath.item]
+    
+    
     return cell
   }
   
