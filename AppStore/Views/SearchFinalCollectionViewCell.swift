@@ -8,7 +8,10 @@
 
 import UIKit
 
-class SearchCollectionViewCell: UICollectionViewCell {
+class SearchFinalCollectionViewCell: UICollectionViewCell {
+  
+  // MARK: - Properties
+  
   let iconImageView: UIImageView = {
     let iv = UIImageView()
     iv.backgroundColor = .blue
@@ -52,12 +55,16 @@ class SearchCollectionViewCell: UICollectionViewCell {
   lazy var screenshot2ImageView: UIImageView = createScreenShotImageView()
   lazy var screenshot3ImageView: UIImageView = createScreenShotImageView()
   
+  // MARK: - Helper methods
+  
   fileprivate func createScreenShotImageView() -> UIImageView {
     let iv = UIImageView()
     iv.backgroundColor = .green
     iv.layer.cornerRadius = 8
     return iv
   }
+  
+  // MARK - Initializer
   
   override init(frame: CGRect) {
     super.init(frame: frame)

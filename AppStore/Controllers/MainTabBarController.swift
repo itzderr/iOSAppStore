@@ -9,6 +9,9 @@
 import UIKit
 
 class MainTabBarController: UITabBarController {
+  
+  // MARK: - Life cycle Methods
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -20,6 +23,12 @@ class MainTabBarController: UITabBarController {
     ]
   }
   
+  /// Helper method to create a ViewController for each tab
+  ///
+  /// - Parameters:
+  ///   - viewController: containter view controller.s
+  ///   - title: nagivation title.
+  ///   - imageName: tab icon image name.
   fileprivate func createViewController(viewController: UIViewController, title: String, imageName: String) -> UIViewController {
     
     viewController.view.backgroundColor = .white

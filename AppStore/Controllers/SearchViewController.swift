@@ -8,55 +8,38 @@
 
 import UIKit
 
-class SearchViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITableViewDelegate {
+enum SearchState {
+  case trending
+  case suggestion
+  case final
+}
+
+// Trending Page
+class SearchViewController: UITableViewController {
   
   // MARK: - Properties
   
-  private var searchResults = [ResultApp]()
   private var searchController: UISearchController!
-  private var autoCompleteViewController: AutoCompleteViewController!
-  
+  private var searchResultsContainerViewController = SearchResultsContainterViewController()
+  private var searchState: SearchState = .trending
+  private var timer: Timer?
   // MARK: - Constants
   
-  static let cellId = "resultCell"
+  private let cellId = "trendingCell"
+  private let trendings = ["Instagram", "Facebook", "Tinder", "Snapchat", "Google"]
   
   // MARK: - View Life Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    autoCompleteViewController = AutoCompleteViewController()
-    searchController = UISearchController(searchResultsController: autoCompleteViewController) // Not in IB
-    searchController.searchResultsUpdater = autoCompleteViewController
-    autoCompleteViewController.navigationItem.searchController = self.searchController
-    
-    collectionView.backgroundColor = .white
-    collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchViewController.cellId)
+    searchController = UISearchController(searchResultsController: searchResultsContainerViewController) // Not in IB
+    searchController.searchResultsUpdater = self
     setupSearchBar()
+    
+    tableView.register(TrendingTableViewCell.self, forCellReuseIdentifier: cellId)
   }
   
-  init() {
-    super.init(collectionViewLayout: UICollectionViewFlowLayout())
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
-  // MARK - Helper Methods
-  
-  fileprivate func fetchSearchResultApps() {
-    APIService.shared.fetchSearchResultApps(searchTerm: "\(searchController.searchBar.text ?? "")") { (results, err) in
-      if let err = err {
-        print("Failed to fetch apps: ", err)
-        return
-      }
-      
-      self.searchResults = results
-      DispatchQueue.main.async {
-        self.collectionView.reloadData()
-      }
-    }
-  }
+  // MARK: - Helper Methods
   
   private func setupSearchBar() {
     navigationItem.searchController = self.searchController // From iOS 11
@@ -65,94 +48,96 @@ class SearchViewController: UICollectionViewController, UICollectionViewDelegate
     // Ensure that the search bar does not remain on the screen if user navigates to another view controller
     // while the UISearchController is active
     definesPresentationContext = true
+    searchController.delegate = self
     searchController.searchBar.delegate = self // Monitor when the search button is tapped.
     searchController.searchBar.placeholder = "App Store"
-  }
-  
-  // MARK: - UICollectionViewDelegateFlowLayout
-  
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: view.frame.width, height: 350)
-  }
-  
-  // MARK: - UICollectionViewDataSource
-  
-  override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return searchResults.count
-  }
-  
-  override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    // downcasting (UICollectionViewCell -> SearchCollectionViewCell)
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchViewController.cellId, for: indexPath) as! SearchCollectionViewCell
-    
-    let resultApp = searchResults[indexPath.item]
-    cell.nameLabel.text = resultApp.trackName
-    cell.categoryLabel.text = resultApp.primaryGenreName
-    cell.ratingsLabel.text = "Ratings: \(resultApp.averageUserRating ?? 0)"
-    return cell
-  }
-}
-
-// MARK: - SearchBar
-
-extension SearchViewController: UISearchBarDelegate {
-  
-  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    fetchSearchResultApps()
-    searchController.isActive = false
-  }
-}
-
-// MARK: - AutoCompleteViewController
-
-fileprivate class AutoCompleteViewController: UITableViewController, UISearchResultsUpdating {
-  static let cellId = "resultCell"
-  private var searchTerms = [ResultApp]()
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    tableView.backgroundColor = .blue
-    tableView.register(UITableViewCell.self, forCellReuseIdentifier: AutoCompleteViewController.cellId)
+    searchController.searchBar.autocapitalizationType = .none
   }
   
   // MARK: - Table view data source
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return searchTerms.count
+    return trendings.count
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: AutoCompleteViewController.cellId, for: indexPath)
-    cell.textLabel?.text = "🔍 \(searchTerms[indexPath.row].trackName)"
-    return cell
-  }
-  
-  // MARK - Search Reuslts Updating
-  
-  func updateSearchResults(for searchController: UISearchController) {
-    // search throttling
-    APIService.shared.fetchSearchResultApps(searchTerm: "\(searchController.searchBar.text ?? "")") { (results, err) in
-      if let err = err {
-        print("Failed to fetch apps: ", err)
-        return
-      }
-      
-      self.searchTerms = results
-      DispatchQueue.main.async {
-        self.tableView.reloadData()
-      }
+    if indexPath.row == 0 {
+      let staticCell = TrendingTableViewCell()
+      staticCell.setupStaticCell()
+      return staticCell
+    } else {
+      let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! TrendingTableViewCell
+      cell.nameLabel.text = trendings[indexPath.row]
+      return cell
     }
   }
   
-  // MARK - Table View delgate
+  // MARK: - Table view delegate
+  
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let selectedSearchTerm = searchTerms[indexPath.row].trackName
-    if let searchController = navigationItem.searchController {
-      searchController.isActive = true
-      searchController.searchBar.text = selectedSearchTerm
-      dismiss(animated: true)
-    }
+    
   }
   
 }
 
+// MARK: - UISearchResultsUpdating
+
+extension SearchViewController: UISearchResultsUpdating {
+
+  func updateSearchResults(for searchController: UISearchController) {
+    
+    guard let searchTerm = searchController.searchBar.text, !searchTerm.isEmpty else {
+      searchState = .trending
+      return
+    }
+    // throttling
+    timer?.invalidate()
+    timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { (_) in
+      self.searchResultsContainerViewController.showSearchResults(searchTerm: searchTerm, searchState: self.searchState)
+    })
+  }
+}
+
+// MARK: - Search Bar Delegate
+
+extension SearchViewController: UISearchBarDelegate {
+  
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    searchState = searchText.isEmpty ? .trending : .suggestion
+  }
+  
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    guard let searchTerm = searchController.searchBar.text, !searchTerm.isEmpty else { return }
+    searchResultsContainerViewController.showSearchResults(searchTerm: searchTerm, searchState: .final)
+  }
+  
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    searchResultsContainerViewController.showSearchResults(searchTerm: "", searchState: .suggestion)
+    searchBar.resignFirstResponder()
+  }
+}
+
+// MARK: - Search Controller delegate
+
+extension SearchViewController: UISearchControllerDelegate {
+  
+  func presentSearchController(_ searchController: UISearchController) {
+//    debugPrint("\(#function)")
+  }
+  
+  func willPresentSearchController(_ searchController: UISearchController) {
+//    debugPrint("\(#function)")
+  }
+  
+  func didPresentSearchController(_ searchController: UISearchController) {
+//    debugPrint("\(#function)")
+  }
+  
+  func willDismissSearchController(_ searchController: UISearchController) {
+//    debugPrint("\(#function)")
+  }
+  
+  func didDismissSearchController(_ searchController: UISearchController) {
+//    debugPrint("\(#function)")
+  }
+}

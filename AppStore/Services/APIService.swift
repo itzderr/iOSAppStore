@@ -14,7 +14,7 @@ class APIService {
   
   func fetchSearchResultApps(searchTerm: String, completion: @escaping ([ResultApp], Error?) -> ()) {
     // 1. get url
-    let urlStr = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software"
+    let urlStr = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software&limit=12"
     guard let url = URL(string: urlStr) else { return }
     // 2. send a request
     URLSession.shared.dataTask(with: url) { (data, response, error) in
