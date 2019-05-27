@@ -20,9 +20,10 @@ class SearchViewController: UITableViewController {
   // MARK: - Properties
   
   private var searchController: UISearchController!
-  private var searchResultsContainerViewController = SearchResultsContainterViewController()
+  private var searchResultsContainerViewController = SearchResultsContainerViewController()
   private var searchState: SearchState = .trending
   private var timer: Timer?
+  
   // MARK: - Constants
   
   private let cellId = "trendingCell"
@@ -92,7 +93,7 @@ extension SearchViewController: UISearchResultsUpdating {
     }
     // throttling
     timer?.invalidate()
-    timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { (_) in
+    timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { [unowned self] (_) in
       self.searchResultsContainerViewController.showSearchResults(searchTerm: searchTerm, searchState: self.searchState)
     })
   }

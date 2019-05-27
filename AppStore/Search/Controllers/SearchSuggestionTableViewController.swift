@@ -20,8 +20,6 @@ class SearchSuggestionTableViewController: UITableViewController {
   
   weak var delegate: SearchSuggestionTableViewDelegate?
   
-  var didSelect: ((String) -> ())!
-  
   // MARK: - Constants
   
   private let cellId = "resultCell"
@@ -57,15 +55,15 @@ class SearchSuggestionTableViewController: UITableViewController {
   }
   
   func fetchSearchResultApps(searchTerm: String) {
-    APIService.shared.fetchSearchResultApps(searchTerm: searchTerm) { (results, err) in
+    APIService.shared.fetchSearchResultApps(searchTerm: searchTerm) { [weak self] (results, err) in
       if let err = err {
         print("Failed to fetch apps: ", err)
         return
       }
       
-      self.searchTerms = results
+      self?.searchTerms = results
       DispatchQueue.main.async {
-        self.tableView.reloadData()
+        self?.tableView.reloadData()
       }
     }
   }

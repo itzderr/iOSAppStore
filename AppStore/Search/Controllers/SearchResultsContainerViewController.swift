@@ -8,10 +8,10 @@
 
 import UIKit
 
-class SearchResultsContainterViewController: UIViewController {
+class SearchResultsContainerViewController: UIViewController {
   
   private var suggestionTableViewController: SearchSuggestionTableViewController!
-  var previousViewController: UIViewController?
+  private var previousViewController: UIViewController?
   
   // MARK: - Life cycle methods
   
@@ -30,7 +30,7 @@ class SearchResultsContainterViewController: UIViewController {
   ///   - searchTerm: A string for the search query.
   ///   - searchState: A state of the searching process to decide the result ViewController
   func showSearchResults(searchTerm: String, searchState: SearchState) {
-//    print("\(#function):", searchTerm, searchState)
+    debugPrint("\(#function):", searchTerm, searchState)
     switch searchState {
     case .suggestion:
       let suggestionTV = transition(to: suggestionTableViewController, searchState: searchState) as! SearchSuggestionTableViewController
@@ -48,7 +48,7 @@ class SearchResultsContainterViewController: UIViewController {
 
 // MARK: - transitions
 
-extension SearchResultsContainterViewController {
+extension SearchResultsContainerViewController {
   func transition(to viewController: UIViewController, searchState: SearchState) -> UIViewController? {
     previousViewController?.remove()
     add(viewController)
@@ -60,7 +60,7 @@ extension SearchResultsContainterViewController {
 
 // MARK: - SearchSuggestionTableViewDelegate
 
-extension SearchResultsContainterViewController: SearchSuggestionTableViewDelegate {
+extension SearchResultsContainerViewController: SearchSuggestionTableViewDelegate {
   
   /// Delegate method when user select a cell from SearchSuggestionTableViewController
   ///

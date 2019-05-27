@@ -36,6 +36,6 @@ class APIService {
         print("Failed to decode JSON:", jsonError)
         completion([], jsonError)
       }
-      }.resume() // fires!
+    }.resume() // fires!
   }
 }

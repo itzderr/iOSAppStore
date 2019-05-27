@@ -19,5 +19,4 @@ struct ResultApp: Decodable {
   let averageUserRating: Float? // some result does not have rating field
   let screenshotUrls: [String]
   let artworkUrl100: String // icon
-  
 }

@@ -11,6 +11,7 @@ import UIKit
 class SearchFinalCollectionViewCell: UICollectionViewCell {
   
   // MARK: - Properties
+  
   var resultApp: ResultApp! {
     didSet {
       nameLabel.text = resultApp.trackName

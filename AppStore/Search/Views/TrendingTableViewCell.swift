@@ -21,6 +21,7 @@ class TrendingTableViewCell: UITableViewCell {
   }()
   
   // MARK: - Helper methods
+  
   func setupStaticCell() {
     nameLabel.text = "Trending"
     nameLabel.textColor = .black
@@ -28,6 +29,7 @@ class TrendingTableViewCell: UITableViewCell {
   }
   
   // MARK: - Initializer
+  
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .default, reuseIdentifier: reuseIdentifier)
     addSubview(nameLabel)

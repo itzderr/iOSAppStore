@@ -42,15 +42,15 @@ class SearchFinalCollectionViewController: UICollectionViewController, UICollect
   // MARK: - Helper Methods
   
   func fetchSearchResultApps(searchTerm: String) {
-    APIService.shared.fetchSearchResultApps(searchTerm: searchTerm) { (results, err) in
+    APIService.shared.fetchSearchResultApps(searchTerm: searchTerm) { [weak self] (results, err) in
       if let err = err {
         print("Failed to fetch apps: ", err)
         return
       }
       
-      self.searchResults = results
+      self?.searchResults = results
       DispatchQueue.main.async {
-        self.collectionView.reloadData()
+        self?.collectionView.reloadData()
       }
     }
   }
@@ -72,7 +72,6 @@ class SearchFinalCollectionViewController: UICollectionViewController, UICollect
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchFinalCollectionViewCell
     
     cell.resultApp = searchResults[indexPath.item]
-    
     
     return cell
   }
