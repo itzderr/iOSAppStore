@@ -16,7 +16,7 @@ class SearchTrendingTableViewCell: UITableViewCell {
     let lb = UILabel(fontSize: 20, bold: false)
     lb.textColor = .systemBlue
     // default height: 44
-    lb.heightAnchor.constraint(equalToConstant: 44).isActive = true
+    lb.constraintHeight(equalToConstant: 44)
     return lb
   }()
   

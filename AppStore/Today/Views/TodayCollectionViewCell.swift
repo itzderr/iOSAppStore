@@ -24,8 +24,7 @@ class TodayCollectionViewCell: UICollectionViewCell {
   let cellImageView: UIImageView = {
     let iv = UIImageView(image: #imageLiteral(resourceName: "Lab4Physics"))
     iv.contentMode = .scaleToFill
-    iv.translatesAutoresizingMaskIntoConstraints = false
-    iv.heightAnchor.constraint(equalToConstant: 300).isActive = true
+    iv.constraintHeight(equalToConstant: 300)
     return iv
   }()
   

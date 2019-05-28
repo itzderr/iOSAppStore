@@ -15,7 +15,7 @@ class SearchSuggestionTableViewCell: UITableViewCell {
   let nameLabel: UILabel = {
     let lb = UILabel(fontSize: 15, bold: true)
     // default height: 44
-    lb.heightAnchor.constraint(equalToConstant: 44).isActive = true
+    lb.constraintHeight(equalToConstant: 44)
     return lb
   }()
   

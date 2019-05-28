@@ -31,8 +31,8 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   
   let iconImageView: UIImageView = {
     let iv = UIImageView()
-    iv.widthAnchor.constraint(equalToConstant: 64).isActive = true
-    iv.heightAnchor.constraint(equalToConstant: 64).isActive = true
+    iv.constraintWidth(equalToConstant: 64)
+    iv.constraintHeight(equalToConstant: 64)
     iv.layer.cornerRadius = 16
     iv.clipsToBounds = true
     return iv
@@ -62,8 +62,8 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
     butt.setTitleColor(.systemBlue, for: .normal)
     butt.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
     butt.backgroundColor = UIColor(white: 0.95, alpha: 1)
-    butt.widthAnchor.constraint(equalToConstant: 80).isActive = true
-    butt.heightAnchor.constraint(equalToConstant: 32).isActive = true
+    butt.constraintWidth(equalToConstant: 80)
+    butt.constraintHeight(equalToConstant: 32)
     butt.layer.cornerRadius = 16
     return butt
   }()
