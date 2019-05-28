@@ -14,9 +14,14 @@ class MainTabBarController: UITabBarController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    let todayCollectionViewController = TodayCollectionViewController()
+    todayCollectionViewController.view.backgroundColor = .white
+    todayCollectionViewController.tabBarItem.title = "Today"
+    todayCollectionViewController.tabBarItem.image = UIImage(named: "today")
     
     viewControllers = [
-      createViewController(viewController: TodayCollectionViewController(), title: "Today", imageName: "today"),
+//      createViewController(viewController: TodayCollectionViewController(), title: "Today", imageName: "today"),
+      todayCollectionViewController,
       createViewController(viewController: UIViewController(), title: "Games", imageName: "games"),
       createViewController(viewController: UIViewController(), title: "Apps", imageName: "apps"),
       createViewController(viewController: SearchViewController(), title: "Search", imageName: "search"),

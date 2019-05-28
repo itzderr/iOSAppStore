@@ -14,8 +14,9 @@ extension UILabel {
     self.translatesAutoresizingMaskIntoConstraints = false
     if bold {
       self.font = .boldSystemFont(ofSize: fontSize)
+    } else {
+      self.font = UIFont.init(name: "", size: fontSize)
     }
-    self.font = UIFont.init(name: "", size: fontSize)
     self.text = text
   }
 }

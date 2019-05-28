@@ -37,7 +37,7 @@ class SearchViewController: UITableViewController {
     searchController.searchResultsUpdater = self
     setupSearchBar()
     
-    tableView.register(TrendingTableViewCell.self, forCellReuseIdentifier: cellId)
+    tableView.register(SearchTrendingTableViewCell.self, forCellReuseIdentifier: cellId)
   }
   
   // MARK: - Helper Methods
@@ -63,11 +63,11 @@ class SearchViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     if indexPath.row == 0 {
-      let staticCell = TrendingTableViewCell()
+      let staticCell = SearchTrendingTableViewCell()
       staticCell.setupStaticCell()
       return staticCell
     } else {
-      let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! TrendingTableViewCell
+      let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SearchTrendingTableViewCell
       cell.nameLabel.text = trendings[indexPath.row]
       return cell
     }

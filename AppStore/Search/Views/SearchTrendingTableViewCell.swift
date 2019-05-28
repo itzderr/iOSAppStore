@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TrendingTableViewCell: UITableViewCell {
+class SearchTrendingTableViewCell: UITableViewCell {
 
   // MARK: - Properties
   
