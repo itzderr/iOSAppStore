@@ -18,19 +18,15 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
   static let cornerRadius: CGFloat = 16
   
   // MARK: - Variables
+  
   private var todayItems = [
     TodayItem(image: UIImage(named: "GetYourGuide")!, category: "FEATURED APP", title: "Lab4Physics", description: "A Lab in Your Pocket"),
     TodayItem(image: UIImage(named: "Lab4Physics")!, category: "FEATURED APP", title: "Your Insider Travel Guide", description: "GetYourGuide helps you vacation smarter"),
   ]
-  
-  var startFrame: CGRect! // initial cell frame
-  var fullScreenController: TodayFullScreenViewController!
-  
-  // constraints animation
-  var topConstraint: NSLayoutConstraint!
-  var leadingConstraint: NSLayoutConstraint!
-  var widthConstraint: NSLayoutConstraint!
-  var heightConstraint: NSLayoutConstraint!
+  private var startFrame: CGRect! // initial cell frame
+  private var fullScreenController: TodayFullScreenViewController!
+  private var cellConstraints: AnchoredConstraints! // constraints for animation
+
   
   // status bar animation
   override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
@@ -41,7 +37,7 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
     return statusBarHidden
   }
   
-  var statusBarHidden = false
+  private var statusBarHidden = false
   
   // MARK: - Life cycle methods
   
@@ -49,7 +45,6 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
     super.viewDidLoad()
     collectionView.backgroundColor = .white
     collectionView.register(TodayCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-    
   }
   
   // MARK: - Initializers
@@ -72,69 +67,75 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TodayCollectionViewCell
     cell.todayItem = todayItems[indexPath.item]
+    
     return cell
   }
   
   // MARK: - UICollectionViewDelegate
-
+  
   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
+    setupTodayFullScreenController(indexPath)
+    showTodayFullScreenViewController()
+  }
+  
+  // MARK: - helper methods (animation)
+  
+  private func getStartingFrameOfCell(at indexPath: IndexPath) -> CGRect? {
+    // selected cell
+    guard let cell = collectionView.cellForItem(at: indexPath) else { return nil }
+    // frame for animation -> absolute coordinates of cell
+    guard let startFrame = cell.superview?.convert(cell.frame, to: nil) else { return nil }
+    return startFrame
+  }
+  
+  private func setupTodayFullScreenController(_ indexPath: IndexPath) {
     fullScreenController = TodayFullScreenViewController()
+    
     fullScreenController.todayItem = todayItems[indexPath.item]
     fullScreenController.dismissController = {
       self.removeFullScreenView()
     }
+    
     let fullScreenView = fullScreenController.view!
+    fullScreenView.translatesAutoresizingMaskIntoConstraints = false
+    fullScreenView.layer.cornerRadius = TodayCollectionViewController.cornerRadius
     view.addSubview(fullScreenView)
     addChild(fullScreenController)
-    self.collectionView.isUserInteractionEnabled = false // no interaction when selecting
     
-    // selected cell
-    guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-
-    // frame for animation -> absolute coordinates of cell
-    guard let startFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
-    self.startFrame = startFrame
+    self.collectionView.isUserInteractionEnabled = false // no interaction when selecting
+    self.startFrame = getStartingFrameOfCell(at: indexPath)
     
     // constraints animation
-    fullScreenView.translatesAutoresizingMaskIntoConstraints = false
-    
-    topConstraint = fullScreenView.topAnchor.constraint(equalTo: view.topAnchor, constant: startFrame.origin.y)
-    leadingConstraint = fullScreenView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: startFrame.origin.x)
-    widthConstraint = fullScreenView.widthAnchor.constraint(equalToConstant: startFrame.width)
-    heightConstraint = fullScreenView.heightAnchor.constraint(equalToConstant: startFrame.height)
-    
-    [topConstraint, leadingConstraint, widthConstraint, heightConstraint].forEach({ $0.isActive = true })
+    self.cellConstraints = fullScreenView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: nil, bottomAnchor: nil, padding: .init(top: startFrame.origin.y, left: startFrame.origin.x, bottom: 0, right: 0), size: .init(width: startFrame.width, height: startFrame.height))
     
     self.view.layoutIfNeeded()
-    
-    fullScreenView.layer.cornerRadius = TodayCollectionViewController.cornerRadius
-  
-    UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: { [unowned self] () in
-     
-      self.topConstraint.constant = 0
-      self.leadingConstraint.constant = 0
-      self.widthConstraint.constant = self.view.frame.width
-      self.heightConstraint.constant = self.view.frame.height
+  }
+
+  private func showTodayFullScreenViewController() {
+    UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: { [unowned self] in
+      
+      self.cellConstraints?.top?.constant = 0
+      self.cellConstraints?.leading?.constant = 0
+      self.cellConstraints?.width?.constant = self.view.frame.width
+      self.cellConstraints?.height?.constant = self.view.frame.height
       
       self.statusBarHidden = !self.statusBarHidden
       self.setNeedsStatusBarAppearanceUpdate()
       self.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
       self.view.layoutIfNeeded() // starts animation
-    }, completion: nil)
+      }, completion: nil)
   }
   
-  // MARK: - helper methods (animation)
-  
-  func removeFullScreenView() {
+  private func removeFullScreenView() {
     UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: { [unowned self] in
       // when removing from the bottom, bring the collectionView back on top
       self.fullScreenController.collectionView.contentOffset = .zero
       
-      self.topConstraint.constant = self.startFrame.origin.y
-      self.leadingConstraint.constant = self.startFrame.origin.x
-      self.widthConstraint.constant = self.startFrame.width
-      self.heightConstraint.constant = self.startFrame.height
+      self.cellConstraints?.top?.constant = self.startFrame.origin.y
+      self.cellConstraints?.leading?.constant = self.startFrame.origin.x
+      self.cellConstraints?.width?.constant = self.startFrame.width
+      self.cellConstraints?.height?.constant = self.startFrame.height
       
       // status bar animation
       self.statusBarHidden = !self.statusBarHidden
@@ -152,17 +153,14 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
   // MARK: - UICollectionViewDelegateFlowLayout
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    
     return CGSize(width: view.frame.size.width - TodayCollectionViewController.itemSpacing * 2, height: TodayCollectionViewController.cellHeight)
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    
     return TodayCollectionViewController.itemSpacing
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    
     return UIEdgeInsets.init(top: 12, left: 0, bottom: 12, right: 0)
   }
   
