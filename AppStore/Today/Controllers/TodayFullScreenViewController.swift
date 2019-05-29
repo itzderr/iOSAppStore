@@ -27,7 +27,6 @@ class TodayFullScreenViewController: UICollectionViewController, UICollectionVie
     super.viewDidLoad()
     setupCollectionViewLayout()
     setupCollectionView()
-    collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
   }
   
   @objc private func handleDismiss(gesture: UIGestureRecognizer) {
@@ -51,9 +50,9 @@ class TodayFullScreenViewController: UICollectionViewController, UICollectionVie
   // MARK: - helper methods
   
   private func setupCollectionViewLayout() {
-    if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-      layout.sectionInset = .init(top: padding, left: padding, bottom: padding, right: padding)
-    }
+//    if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+//      layout.sectionInset = .init(top: padding, left: padding, bottom: padding, right: padding)
+//    }
   }
   
   private func setupCollectionView() {
@@ -70,7 +69,7 @@ class TodayFullScreenViewController: UICollectionViewController, UICollectionVie
   override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
     let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! TodayFullScreenHeaderView
     header.todayCVCell.todayItem = todayItem
-    
+    header.todayCVCell.backgroundView = nil
     return header
   }
   
@@ -87,11 +86,23 @@ class TodayFullScreenViewController: UICollectionViewController, UICollectionVie
   // MARK: - Collection view delegate
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-    return .init(width: view.frame.width, height: 400)
+    return .init(width: collectionView.frame.width, height: 400)
   }
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     // TODO: change hardcoded values (also for animation)
-    return .init(width: view.frame.width - 2 * padding, height: 1000)
+    return .init(width: collectionView.frame.width - 2 * padding, height: 1000)
+  }
+}
+
+// MARK: - ScrollView delegate methods
+
+extension TodayFullScreenViewController {
+  override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    // collectionView and tableView are scrollView subclasses
+    if scrollView.contentOffset.y < 0 {
+      scrollView.isScrollEnabled = false
+    }
+    scrollView.isScrollEnabled = true
   }
 }

@@ -20,15 +20,19 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
   // MARK: - Variables
   
   private var todayItems = [
-    TodayItem(image: UIImage(named: "GetYourGuide")!, category: "FEATURED APP", title: "Lab4Physics", description: "A Lab in Your Pocket"),
-    TodayItem(image: UIImage(named: "Lab4Physics")!, category: "FEATURED APP", title: "Your Insider Travel Guide", description: "GetYourGuide helps you vacation smarter"),
+    TodayItem(image: UIImage(named: "Lab4Physics")!, category: "FEATURED APP", title: "Lab4Physics", description: "A Lab in Your Pocket"),
+    TodayItem(image: UIImage(named: "GetYourGuide")!, category: "FEATURED APP", title: "Your Insider Travel Guide", description: "GetYourGuide helps you vacation smarter"),
   ]
   private var startFrame: CGRect! // initial cell frame
   private var fullScreenController: TodayFullScreenViewController!
   private var cellConstraints: AnchoredConstraints! // constraints for animation
-
+  
+  // blur background visual effect
+  private let blurVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
   
   // status bar animation
+  private var statusBarHidden = false
+  
   override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
     return .slide
   }
@@ -37,12 +41,14 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
     return statusBarHidden
   }
   
-  private var statusBarHidden = false
-  
-  // MARK: - Life cycle methods
+  // MARK: - Life cycle methodss
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    view.addSubview(blurVisualEffectView)
+    blurVisualEffectView.matchParent()
+    blurVisualEffectView.alpha = 0
+    
     collectionView.backgroundColor = .white
     collectionView.register(TodayCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
   }
@@ -79,6 +85,20 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
     showTodayFullScreenViewController()
   }
   
+  // MARK: - UICollectionViewDelegateFlowLayout
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return CGSize(width: view.frame.size.width - TodayCollectionViewController.itemSpacing * 2, height: TodayCollectionViewController.cellHeight)
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    return TodayCollectionViewController.itemSpacing
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    return UIEdgeInsets.init(top: 12, left: 0, bottom: 12, right: 0)
+  }
+  
   // MARK: - helper methods (animation)
   
   private func getStartingFrameOfCell(at indexPath: IndexPath) -> CGRect? {
@@ -103,18 +123,19 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
     view.addSubview(fullScreenView)
     addChild(fullScreenController)
     
-    self.collectionView.isUserInteractionEnabled = false // no interaction when selecting
-    self.startFrame = getStartingFrameOfCell(at: indexPath)
+    collectionView.isUserInteractionEnabled = false // no interaction when selecting
+    startFrame = getStartingFrameOfCell(at: indexPath)
     
     // constraints animation
-    self.cellConstraints = fullScreenView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: nil, bottomAnchor: nil, padding: .init(top: startFrame.origin.y, left: startFrame.origin.x, bottom: 0, right: 0), size: .init(width: startFrame.width, height: startFrame.height))
-    
-    self.view.layoutIfNeeded()
+    cellConstraints = fullScreenView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: nil, bottomAnchor: nil, padding: .init(top: startFrame.origin.y, left: startFrame.origin.x, bottom: 0, right: 0), size: .init(width: startFrame.width, height: startFrame.height))
+
+    view.layoutIfNeeded()
+    setupPanGestureRecognizer()
   }
 
   private func showTodayFullScreenViewController() {
     UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: { [unowned self] in
-      
+      self.blurVisualEffectView.alpha = 1
       self.cellConstraints?.top?.constant = 0
       self.cellConstraints?.leading?.constant = 0
       self.cellConstraints?.width?.constant = self.view.frame.width
@@ -129,6 +150,9 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
   
   private func removeFullScreenView() {
     UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: { [unowned self] in
+      self.blurVisualEffectView.alpha = 0
+      // drag to dismiss changes transform property
+      self.fullScreenController.view.transform = .identity
       // when removing from the bottom, bring the collectionView back on top
       self.fullScreenController.collectionView.contentOffset = .zero
       
@@ -149,19 +173,41 @@ class TodayCollectionViewController: UICollectionViewController, UICollectionVie
       self.collectionView.isUserInteractionEnabled = true
     }
   }
-  
-  // MARK: - UICollectionViewDelegateFlowLayout
-  
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: view.frame.size.width - TodayCollectionViewController.itemSpacing * 2, height: TodayCollectionViewController.cellHeight)
+}
+
+extension TodayCollectionViewController: UIGestureRecognizerDelegate {
+  private func setupPanGestureRecognizer() {
+    let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragToDismiss))
+    gestureRecognizer.delegate = self
+    self.fullScreenController.view.addGestureRecognizer(gestureRecognizer)
   }
   
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    return TodayCollectionViewController.itemSpacing
+  @objc private func dragToDismiss(gesture: UIPanGestureRecognizer) {
+    let contentOffsetY: CGFloat = fullScreenController.collectionView.contentOffset.y
+    // we do not want to transform when the contentOffset > 0
+    // contentOffsetY == 0 when scrolled to the top
+    if contentOffsetY > 0 { return }
+
+    let translationY = gesture.translation(in: fullScreenController.view).y
+    if gesture.state == .changed {
+      // we do not want to transfrom when scrolling up
+      if translationY > 0 {
+        var scale = 1 - (translationY / 2000)  // translationY value too big
+        // 0.85 <= scale <= 1
+        scale = max(0.85, min(1, scale))
+        fullScreenController.view.transform = CGAffineTransform(scaleX: scale, y: scale)
+      }
+    } else if gesture.state == .ended {
+      if translationY > 200 {
+        removeFullScreenView()
+      } else {
+        fullScreenController.view.transform = .identity
+      }
+    }
   }
   
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    return UIEdgeInsets.init(top: 12, left: 0, bottom: 12, right: 0)
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    return true
   }
   
 }

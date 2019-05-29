@@ -14,9 +14,9 @@ class TodayFullScreenHeaderView: UICollectionReusableView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
-    addSubview(todayCVCell)
-    todayCVCell.matchParent()
+    let todayCVCCellView = todayCVCell.contentView
+    addSubview(todayCVCCellView)
+    todayCVCCellView.matchParent()
   }
   
   required init?(coder aDecoder: NSCoder) {

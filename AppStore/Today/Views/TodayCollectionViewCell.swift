@@ -21,27 +21,27 @@ class TodayCollectionViewCell: UICollectionViewCell {
     }
   }
 
-  let cellImageView: UIImageView = {
+  private let cellImageView: UIImageView = {
     let iv = UIImageView(image: #imageLiteral(resourceName: "Lab4Physics"))
     iv.contentMode = .scaleToFill
     iv.constraintHeight(equalToConstant: 300)
     return iv
   }()
   
-  let categoryLabel: UILabel = {
+  private let categoryLabel: UILabel = {
     let lb = UILabel(fontSize: 16, bold: true)
     lb.textColor = UIColor(white: 0.5, alpha: 0.7)
     return lb
   }()
   
-  let titleLabel: UILabel = {
+  private let titleLabel: UILabel = {
     let lb = UILabel(fontSize: 24, bold: true)
 //    lb.numberOfLines = 2 ?? 0 unlimitted lines
 //    lb.lineBreakMode = .byWordWrapping
     return lb
   }()
   
-  let descriptionLabel: UILabel = {
+  private let descriptionLabel: UILabel = {
     let lb = UILabel(fontSize: 14, bold: false)
     lb.textColor = UIColor(white: 0.4, alpha: 1.0)
     return lb
@@ -81,8 +81,8 @@ class TodayCollectionViewCell: UICollectionViewCell {
     contentView.addSubview(cellImageView)
     contentView.addSubview(labelStackView)
     
-    cellImageView.anchors(topAnchor: topAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: nil)
-    labelStackView.anchors(topAnchor: cellImageView.bottomAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: bottomAnchor, padding: .init(top: 8, left: 8, bottom: 8, right: 8))
+    cellImageView.anchors(topAnchor: contentView.topAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil)
+    labelStackView.anchors(topAnchor: cellImageView.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor, padding: .init(top: 8, left: 8, bottom: 8, right: 8))
     setShadow()
   }
   
@@ -94,19 +94,19 @@ class TodayCollectionViewCell: UICollectionViewCell {
   
   private func setShadow() {
     // shadowing slows down the performance
-    self.backgroundView = UIView()
-    self.backgroundView?.matchParent()
-    self.backgroundView?.backgroundColor = .white
-    self.backgroundView?.layer.cornerRadius = 16
-    self.backgroundView?.layer.shadowColor = UIColor.black.cgColor
-    self.backgroundView?.layer.shadowOffset = CGSize(width: 0, height: 2)
-    self.backgroundView?.layer.shadowRadius = 16
-    self.backgroundView?.layer.shadowOpacity = 0.3
-    self.backgroundView?.layer.masksToBounds = false // do not want to clip the shadows
-    self.backgroundView?.layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
+    backgroundView = UIView()
+    backgroundView?.matchParent()
+    backgroundView?.backgroundColor = .white
+    backgroundView?.layer.cornerRadius = 16
+    backgroundView?.layer.shadowColor = UIColor.black.cgColor
+    backgroundView?.layer.shadowOffset = CGSize(width: 0, height: 2)
+    backgroundView?.layer.shadowRadius = 16
+    backgroundView?.layer.shadowOpacity = 0.3
+    backgroundView?.layer.masksToBounds = false // do not want to clip the shadows
+    backgroundView?.layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
 
     // increase performance (scroll) - but blury when you apply on contentView's layer
-    self.backgroundView?.layer.shouldRasterize = true
+    backgroundView?.layer.shouldRasterize = true
   }
   
 }

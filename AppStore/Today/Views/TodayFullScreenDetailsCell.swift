@@ -10,7 +10,7 @@ import UIKit
 
 class TodayFullScreenDetailsCell: UICollectionViewCell {
   
-  let descriptionLabel: UILabel = {
+  private let descriptionLabel: UILabel = {
     let label = UILabel()
     let attributedText = NSMutableAttributedString(string: "Learning about science can always be more fun.", attributes: [.foregroundColor: UIColor.black, .font: UIFont.boldSystemFont(ofSize: 18) ])
     
@@ -22,6 +22,8 @@ class TodayFullScreenDetailsCell: UICollectionViewCell {
   
     return label
   }()
+  
+  // MARK: - initializers
   
   override init(frame: CGRect) {
     super.init(frame: frame)
