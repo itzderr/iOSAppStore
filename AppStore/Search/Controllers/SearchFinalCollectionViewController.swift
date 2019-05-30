@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-class SearchFinalCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class SearchFinalCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
   
   // MARK: - Properties
   
@@ -26,14 +26,6 @@ class SearchFinalCollectionViewController: UICollectionViewController, UICollect
     
     collectionView.backgroundColor = .white
     collectionView.register(SearchFinalCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-  }
-  
-  init() {
-    super.init(collectionViewLayout: UICollectionViewFlowLayout())
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
   
   deinit {

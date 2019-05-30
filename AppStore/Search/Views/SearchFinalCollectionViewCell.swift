@@ -44,17 +44,7 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   
   let ratingsLabel: UILabel = UILabel(text: "991K")
   
-  let getButton: UIButton = {
-    let butt = UIButton(type: .system)
-    butt.setTitle("GET", for: .normal)
-    butt.setTitleColor(.systemBlue, for: .normal)
-    butt.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-    butt.backgroundColor = UIColor(white: 0.95, alpha: 1)
-    butt.constraintWidth(equalToConstant: 80)
-    butt.constraintHeight(equalToConstant: 32)
-    butt.layer.cornerRadius = 16
-    return butt
-  }()
+  let getButton: UIButton = UIButton.getButton()
   
   lazy var screenshot1ImageView: UIImageView = createScreenShotImageView()
   lazy var screenshot2ImageView: UIImageView = createScreenShotImageView()

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TodayFullScreenViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class TodayFullScreenViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
   
   // MARK: - constants
   
@@ -34,14 +34,6 @@ class TodayFullScreenViewController: UICollectionViewController, UICollectionVie
   }
   
   // MARK: - Initializers
- 
-  init() {
-    super.init(collectionViewLayout: UICollectionViewFlowLayout())
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
   
   deinit {
     print("\(String(describing: self)) \(#function)")

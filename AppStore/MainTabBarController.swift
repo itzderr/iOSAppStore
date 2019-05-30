@@ -23,7 +23,7 @@ class MainTabBarController: UITabBarController {
 //      createViewController(viewController: TodayCollectionViewController(), title: "Today", imageName: "today"),
       todayCollectionViewController,
       createViewController(viewController: UIViewController(), title: "Games", imageName: "games"),
-      createViewController(viewController: UIViewController(), title: "Apps", imageName: "apps"),
+      createViewController(viewController: AppsCollectionViewController(), title: "Apps", imageName: "apps"),
       createViewController(viewController: SearchViewController(), title: "Search", imageName: "search"),
     ]
   }
