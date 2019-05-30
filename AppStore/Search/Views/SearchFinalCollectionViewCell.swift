@@ -38,23 +38,11 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
     return iv
   }()
   
-  let nameLabel: UILabel = {
-    let lb = UILabel()
-    lb.text = "Instagram"
-    return lb
-  }()
+  let nameLabel: UILabel = UILabel(text: "Instagram")
   
-  let categoryLabel: UILabel = {
-    let lb = UILabel()
-    lb.text = "Photos & Videos"
-    return lb
-  }()
+  let categoryLabel: UILabel = UILabel(text: "Photos & Videos")
   
-  let ratingsLabel: UILabel = {
-    let lb = UILabel()
-    lb.text = "991K"
-    return lb
-  }()
+  let ratingsLabel: UILabel = UILabel(text: "991K")
   
   let getButton: UIButton = {
     let butt = UIButton(type: .system)

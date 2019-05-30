@@ -28,24 +28,11 @@ class TodayCollectionViewCell: UICollectionViewCell {
     return iv
   }()
   
-  private let categoryLabel: UILabel = {
-    let lb = UILabel(fontSize: 16, bold: true)
-    lb.textColor = UIColor(white: 0.5, alpha: 0.7)
-    return lb
-  }()
+  private let categoryLabel: UILabel = UILabel(font: .boldSystemFont(ofSize: 16), textColor: UIColor(white: 0.5, alpha: 0.7))
   
-  private let titleLabel: UILabel = {
-    let lb = UILabel(fontSize: 24, bold: true)
-//    lb.numberOfLines = 2 ?? 0 unlimitted lines
-//    lb.lineBreakMode = .byWordWrapping
-    return lb
-  }()
+  private let titleLabel: UILabel = UILabel(font: .boldSystemFont(ofSize: 24))
   
-  private let descriptionLabel: UILabel = {
-    let lb = UILabel(fontSize: 14, bold: false)
-    lb.textColor = UIColor(white: 0.4, alpha: 1.0)
-    return lb
-  }()
+  private let descriptionLabel: UILabel = UILabel(font: .systemFont(ofSize: 14), textColor: UIColor(white: 0.4, alpha: 1.0))
   
   // MARK: - cell press animation
   override var isHighlighted: Bool {

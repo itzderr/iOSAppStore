@@ -9,13 +9,14 @@
 import UIKit
 
 extension UILabel {
-  convenience init(fontSize: CGFloat = 17, bold: Bool = false, text: String = "") {
+  convenience init(text: String = "", font: UIFont? = nil, textColor: UIColor? = nil) {
     self.init(frame: .zero)
     self.translatesAutoresizingMaskIntoConstraints = false
-    if bold {
-      self.font = .boldSystemFont(ofSize: fontSize)
-    } else {
-      self.font = UIFont.init(name: "", size: fontSize)
+    if let font = font {
+      self.font = font
+    }
+    if let textColor = textColor {
+      self.textColor = textColor
     }
     self.text = text
   }

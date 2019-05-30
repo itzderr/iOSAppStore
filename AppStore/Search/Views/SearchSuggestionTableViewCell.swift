@@ -13,7 +13,7 @@ class SearchSuggestionTableViewCell: UITableViewCell {
   // MARK: - Properties
   
   let nameLabel: UILabel = {
-    let lb = UILabel(fontSize: 15, bold: true)
+    let lb = UILabel(font: .systemFont(ofSize: 15))
     // default height: 44
     lb.constraintHeight(equalToConstant: 44)
     return lb
