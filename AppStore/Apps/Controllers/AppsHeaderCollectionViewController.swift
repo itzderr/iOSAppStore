@@ -9,6 +9,13 @@
 import UIKit
 
 class AppsHeaderCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
+  
+  // MARK: - constants
+  
+  private final let horizontalSpacing: CGFloat = 16
+  
+  // MARK: - life cycle methods
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -35,12 +42,11 @@ class AppsHeaderCollectionViewController: BaseCollectionViewController, UICollec
   // MARK: - collection view flow layout delegate
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    // padding * 2
-    return .init(width: view.frame.width - 32, height: view.frame.height)
+    return .init(width: view.frame.width - horizontalSpacing * 2, height: view.frame.height)
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    return .init(top: 0, left: 16, bottom: 0, right: 16)
+    return .init(top: 0, left: horizontalSpacing, bottom: 0, right: horizontalSpacing)
   }
  
 }

@@ -12,10 +12,10 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
   
   // MARK: - Constant
   
-  private let reuseIdentifier = "todayCell"
-  static let cellHeight: CGFloat = 400
-  static let itemSpacing: CGFloat = 24
-  static let cornerRadius: CGFloat = 16
+  private final let reuseIdentifier = "todayCell"
+  private final let itemHeight: CGFloat = 400
+  private final let itemSpacing: CGFloat = 24
+  private final let cornerRadius: CGFloat = 16
   
   // MARK: - Variables
   
@@ -78,15 +78,15 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
   // MARK: - UICollectionViewDelegateFlowLayout
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: view.frame.size.width - TodayCollectionViewController.itemSpacing * 2, height: TodayCollectionViewController.cellHeight)
+    return CGSize(width: view.frame.size.width - itemSpacing * 2, height: itemHeight)
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    return TodayCollectionViewController.itemSpacing
+    return itemSpacing
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    return UIEdgeInsets.init(top: 12, left: 0, bottom: 12, right: 0)
+    return UIEdgeInsets.init(top: itemSpacing / 2, left: 0, bottom: itemSpacing / 2, right: 0)
   }
   
   // MARK: - helper methods (animation)
@@ -109,7 +109,7 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
     
     let fullScreenView = fullScreenController.view!
     fullScreenView.translatesAutoresizingMaskIntoConstraints = false
-    fullScreenView.layer.cornerRadius = TodayCollectionViewController.cornerRadius
+    fullScreenView.layer.cornerRadius = cornerRadius
     view.addSubview(fullScreenView)
     addChild(fullScreenController)
     

@@ -17,7 +17,7 @@ class SearchFinalCollectionViewController: BaseCollectionViewController, UIColle
   
   // MARK: - Constants
   
-  private let cellId = "resultCell"
+  private final let cellId = "resultCell"
   
   // MARK: - Life cycle Methods
   
@@ -49,8 +49,10 @@ class SearchFinalCollectionViewController: BaseCollectionViewController, UIColle
   
   // MARK: - UICollectionViewDelegateFlowLayout
   
+  private final let itemHeight: CGFloat = 350
+  
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: view.frame.width, height: 350)
+    return CGSize(width: view.frame.width, height: itemHeight)
   }
   
   // MARK: - UICollectionViewDataSource

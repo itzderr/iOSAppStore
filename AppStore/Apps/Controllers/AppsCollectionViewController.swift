@@ -10,13 +10,21 @@ import UIKit
 
 class AppsCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
   
+  // MARK: - constants
+  
+  private final let cellIdentifier = "AppsHeaderCell"
+  private final let headerIdentifier = "AppsGroupCell"
+  private final let itemHeight: CGFloat = 300
+  
+  // MARK: - Lifecycle methods
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     collectionView.backgroundColor = .white
     
-    collectionView.register(AppsHeaderReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+    collectionView.register(AppsHeaderReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
     
-    collectionView.register(AppsGroupCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+    collectionView.register(AppsGroupCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
   }
 
   // MARK: - collection view data source
@@ -26,14 +34,14 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
   }
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! AppsGroupCollectionViewCell
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! AppsGroupCollectionViewCell
     
     return cell
   }
   
   override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
     
-    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header", for: indexPath)
+    let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier, for: indexPath)
     
     return headerView
   }
@@ -41,8 +49,6 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
   // MARK: - collection view delegate
   
   // MARK: - collection view flowlayout delegate
-  
-  final let itemHeight: CGFloat = 300
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
     return .init(width: view.frame.width, height: itemHeight)

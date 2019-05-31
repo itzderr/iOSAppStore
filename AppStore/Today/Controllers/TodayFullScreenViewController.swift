@@ -12,9 +12,11 @@ class TodayFullScreenViewController: BaseCollectionViewController, UICollectionV
   
   // MARK: - constants
   
-  private let cellIdentifier = "DetailsCell"
-  private let headerIdentifier = "HeaderCell"
-  private let padding: CGFloat = 12
+  private final let cellIdentifier = "DetailsCell"
+  private final let headerIdentifier = "HeaderCell"
+  private final let horizontalSpacing: CGFloat = 12
+  private final let cornerRadius: CGFloat = 16
+  private final let itemHeight: CGFloat = 400
   
   // MARK: - variables
   
@@ -49,7 +51,7 @@ class TodayFullScreenViewController: BaseCollectionViewController, UICollectionV
   
   private func setupCollectionView() {
     collectionView.backgroundColor = .white
-    collectionView.layer.cornerRadius = 16
+    collectionView.layer.cornerRadius = cornerRadius
     collectionView.contentInsetAdjustmentBehavior = .never // no insets
     
     collectionView.register(TodayFullScreenDetailsCell.self, forCellWithReuseIdentifier: cellIdentifier)
@@ -78,12 +80,12 @@ class TodayFullScreenViewController: BaseCollectionViewController, UICollectionV
   // MARK: - Collection view delegate
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-    return .init(width: collectionView.frame.width, height: 400)
+    return .init(width: collectionView.frame.width, height: itemHeight)
   }
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    // TODO: change hardcoded values (also for animation)
-    return .init(width: collectionView.frame.width - 2 * padding, height: 1000)
+    // TODO: change hardcoded height value (also for animation)
+    return .init(width: collectionView.frame.width - 2 * horizontalSpacing, height: 1000)
   }
 }
 

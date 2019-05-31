@@ -25,7 +25,7 @@ class AppsHeaderCollectionViewCell: UICollectionViewCell {
                                  textColor: .gray)
   
   let appImageView: UIImageView = {
-    let iv = UIImageView(cornerRadius: 8)
+    let iv = UIImageView(cornerRadius: 16)
     iv.backgroundColor = .green
     return iv
   }()

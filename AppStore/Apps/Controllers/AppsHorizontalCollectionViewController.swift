@@ -10,11 +10,20 @@ import UIKit
 
 class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
   
+  // MARK: - constants
+  
+  private final let cellIdentifier = "HorizontalAppsCell"
+  private final let verticalSpacing: CGFloat = 10
+  private final let horizontalSpacing: CGFloat = 16
+  private final let numRows: CGFloat = 3
+  
+  // MARK: - lifecycle methods
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     collectionView.backgroundColor = .white
     
-    collectionView.register(AppsItemCollectionViewCell.self, forCellWithReuseIdentifier: "horizontal")
+    collectionView.register(AppsItemCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
     
     let layout = collectionViewLayout as! UICollectionViewFlowLayout
     layout.scrollDirection = .horizontal
@@ -28,7 +37,7 @@ class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICo
   }
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "horizontal", for: indexPath) as! AppsItemCollectionViewCell
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! AppsItemCollectionViewCell
     
     return cell
   }
@@ -36,11 +45,6 @@ class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICo
   // MARK: - CollectionView delegate
   
   // MARK: - CollectionView flow layout delegate
-  
-  final let verticalSpacing: CGFloat = 10
-  final let horizontalSpacing: CGFloat = 16
-  final let numRows: CGFloat = 3
-  
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     let height = (view.frame.height - verticalSpacing * (numRows + 1)) / numRows
