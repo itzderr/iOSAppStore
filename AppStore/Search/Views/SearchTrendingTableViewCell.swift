@@ -13,8 +13,7 @@ class SearchTrendingTableViewCell: UITableViewCell {
   // MARK: - Properties
   
   let nameLabel: UILabel = {
-    let lb = UILabel(font: .systemFont(ofSize: 20))
-    lb.textColor = .systemBlue
+    let lb = UILabel(text: "", font: .systemFont(ofSize: 20), textColor: .systemBlue)
     // default height: 44
     lb.constraintHeight(equalToConstant: 44)
     return lb

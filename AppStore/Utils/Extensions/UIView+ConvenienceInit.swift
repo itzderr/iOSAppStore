@@ -22,8 +22,17 @@ extension UILabel {
   }
 }
 
+extension UIImageView {
+  convenience init(cornerRadius: CGFloat = 0) {
+    self.init(frame: .zero)
+    self.translatesAutoresizingMaskIntoConstraints = false
+    self.layer.cornerRadius = 8
+    self.clipsToBounds = true
+  }
+}
+
 extension UIButton {
-  static func getButton() -> UIButton {
+  static func appleGetButton() -> UIButton {
     let butt = UIButton(type: .system)
     butt.setTitle("GET", for: .normal)
     butt.setTitleColor(.systemBlue, for: .normal)

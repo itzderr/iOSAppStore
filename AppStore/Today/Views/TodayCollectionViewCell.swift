@@ -28,11 +28,13 @@ class TodayCollectionViewCell: UICollectionViewCell {
     return iv
   }()
   
-  private let categoryLabel: UILabel = UILabel(font: .boldSystemFont(ofSize: 16), textColor: UIColor(white: 0.5, alpha: 0.7))
+  private let categoryLabel: UILabel = UILabel(font: .boldSystemFont(ofSize: 16),
+                                               textColor: UIColor(white: 0.5, alpha: 0.7))
   
   private let titleLabel: UILabel = UILabel(font: .boldSystemFont(ofSize: 24))
   
-  private let descriptionLabel: UILabel = UILabel(font: .systemFont(ofSize: 14), textColor: UIColor(white: 0.4, alpha: 1.0))
+  private let descriptionLabel: UILabel = UILabel(font: .systemFont(ofSize: 14),
+                                                  textColor: UIColor(white: 0.4, alpha: 1.0))
   
   // MARK: - cell press animation
   override var isHighlighted: Bool {
@@ -56,14 +58,11 @@ class TodayCollectionViewCell: UICollectionViewCell {
     contentView.layer.cornerRadius = 16
     contentView.clipsToBounds = true
     
-    let labelStackView = UIStackView(arrangedSubviews: [
+    let labelStackView = VerticalStackView(arrangedSubviews: [
       categoryLabel,
       titleLabel,
       descriptionLabel,
-      ])
-    labelStackView.translatesAutoresizingMaskIntoConstraints = false
-    labelStackView.axis = .vertical
-    labelStackView.distribution = .equalSpacing
+      ], spacing: 0, distribution: .equalSpacing)
     
     contentView.addSubview(cellImageView)
     contentView.addSubview(labelStackView)

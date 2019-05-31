@@ -9,7 +9,12 @@
 import UIKit
 
 class AppsHeaderReusableView: UICollectionReusableView {
+  
+  // MARK: - properties
+  
   let appHeaderController = AppsHeaderCollectionViewController()
+  
+  // MARK: - initializers
   
   override init(frame: CGRect) {
     super.init(frame: frame)

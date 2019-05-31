@@ -24,7 +24,7 @@ class MainTabBarController: UITabBarController {
       todayCollectionViewController,
       createViewController(viewController: UIViewController(), title: "Games", imageName: "games"),
       createViewController(viewController: AppsCollectionViewController(), title: "Apps", imageName: "apps"),
-      createViewController(viewController: SearchViewController(), title: "Search", imageName: "search"),
+      createViewController(viewController: SearchTableViewController(), title: "Search", imageName: "search"),
     ]
   }
   

@@ -30,11 +30,9 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   }
   
   let iconImageView: UIImageView = {
-    let iv = UIImageView()
+    let iv = UIImageView(cornerRadius: 16)
     iv.constraintWidth(equalToConstant: 64)
     iv.constraintHeight(equalToConstant: 64)
-    iv.layer.cornerRadius = 16
-    iv.clipsToBounds = true
     return iv
   }()
   
@@ -44,7 +42,7 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   
   let ratingsLabel: UILabel = UILabel(text: "991K")
   
-  let getButton: UIButton = UIButton.getButton()
+  let getButton: UIButton = UIButton.appleGetButton()
   
   lazy var screenshot1ImageView: UIImageView = createScreenShotImageView()
   lazy var screenshot2ImageView: UIImageView = createScreenShotImageView()
@@ -53,9 +51,7 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   // MARK: - Helper methods
   
   fileprivate func createScreenShotImageView() -> UIImageView {
-    let iv = UIImageView()
-    iv.layer.cornerRadius = 8
-    iv.clipsToBounds = true
+    let iv = UIImageView(cornerRadius: 8)
     iv.layer.borderWidth = 0.5
     iv.layer.borderColor = UIColor(white: 0.5, alpha: 0.5).cgColor
     iv.contentMode = .scaleAspectFill
@@ -67,29 +63,25 @@ class SearchFinalCollectionViewCell: UICollectionViewCell {
   override init(frame: CGRect) {
     super.init(frame: frame)
     
-    let labelsStackView = UIStackView(arrangedSubviews: [
-      nameLabel, categoryLabel, ratingsLabel
+    let labelsStackView = VerticalStackView(arrangedSubviews: [
+      nameLabel,
+      categoryLabel,
+      ratingsLabel
       ])
-    labelsStackView.axis = .vertical
     
-    let appInfoStackView = UIStackView(arrangedSubviews: [
+    let appInfoStackView = HorizontalStackView(arrangedSubviews: [
       iconImageView, labelsStackView, getButton
-      ])
-    appInfoStackView.spacing = 12
-    appInfoStackView.alignment = .center
+      ], spacing: 12, alignment: .center)
     
-    let screenshotsStackView = UIStackView(arrangedSubviews: [
+    let screenshotsStackView = HorizontalStackView(arrangedSubviews: [
       screenshot1ImageView, screenshot2ImageView, screenshot3ImageView
-      ])
-    screenshotsStackView.spacing = 12
-    screenshotsStackView.distribution = .fillEqually
+      ], spacing: 12, distribution: .fillEqually)
     
-    let wholeStackView = UIStackView(arrangedSubviews: [
-      appInfoStackView, screenshotsStackView
-      ])
-    wholeStackView.axis = .vertical
-    wholeStackView.spacing = 16
-    
+    let wholeStackView = VerticalStackView(arrangedSubviews: [
+      appInfoStackView,
+      screenshotsStackView
+      ], spacing: 16)
+
     addSubview(wholeStackView)
     wholeStackView.matchParent(padding: .init(top: 16, left: 16, bottom: 16, right: 16))
   }

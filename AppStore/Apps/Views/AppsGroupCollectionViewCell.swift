@@ -10,7 +10,9 @@ import UIKit
 
 class AppsGroupCollectionViewCell: UICollectionViewCell {
   
-  let categoryLabel = UILabel(text: "Must-Have Apps", font: .boldSystemFont(ofSize: 22), textColor: .black)
+  let categoryLabel = UILabel(text: "Must-Have Apps",
+                              font: .boldSystemFont(ofSize: 22),
+                              textColor: .black)
   
   let seeAllButton: UIButton = {
     let b = UIButton(type: .system)
@@ -25,15 +27,12 @@ class AppsGroupCollectionViewCell: UICollectionViewCell {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    let hStackView = UIStackView(arrangedSubviews: [
-      categoryLabel, seeAllButton
-      ])
-    hStackView.translatesAutoresizingMaskIntoConstraints = false
+    let hStackView = HorizontalStackView(arrangedSubviews: [categoryLabel, seeAllButton])
     
     addSubview(hStackView)
     addSubview(appsHorizontalController.view)
     
-    hStackView.anchors(topAnchor: topAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: nil, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
+    hStackView.anchors(topAnchor: topAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: nil, padding: .init(top: 16, left: 16, bottom: 0, right: 20))
     
     appsHorizontalController.view.anchors(topAnchor: hStackView.bottomAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: bottomAnchor)
   }

@@ -15,7 +15,7 @@ enum SearchState {
 }
 
 // Trending Page
-class SearchViewController: UITableViewController {
+class SearchTableViewController: UITableViewController {
   
   // MARK: - Properties
   
@@ -83,7 +83,7 @@ class SearchViewController: UITableViewController {
 
 // MARK: - UISearchResultsUpdating
 
-extension SearchViewController: UISearchResultsUpdating {
+extension SearchTableViewController: UISearchResultsUpdating {
 
   func updateSearchResults(for searchController: UISearchController) {
     
@@ -101,7 +101,7 @@ extension SearchViewController: UISearchResultsUpdating {
 
 // MARK: - Search Bar Delegate
 
-extension SearchViewController: UISearchBarDelegate {
+extension SearchTableViewController: UISearchBarDelegate {
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     searchState = searchText.isEmpty ? .trending : .suggestion
@@ -120,7 +120,7 @@ extension SearchViewController: UISearchBarDelegate {
 
 // MARK: - Search Controller delegate
 
-extension SearchViewController: UISearchControllerDelegate {
+extension SearchTableViewController: UISearchControllerDelegate {
   
   func presentSearchController(_ searchController: UISearchController) {
 //    debugPrint("\(#function)")

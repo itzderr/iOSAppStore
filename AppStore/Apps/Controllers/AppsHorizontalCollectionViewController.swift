@@ -37,20 +37,22 @@ class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICo
   
   // MARK: - CollectionView flow layout delegate
   
+  final let verticalSpacing: CGFloat = 10
+  final let horizontalSpacing: CGFloat = 16
+  final let numRows: CGFloat = 3
+  
+  
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    let height = (view.frame.height - spacing * 4) / 3
+    let height = (view.frame.height - verticalSpacing * (numRows + 1)) / numRows
   
-    return .init(width: view.frame.width - padding * 2, height: height)
+    return .init(width: view.frame.width - horizontalSpacing * 2, height: height)
   }
-  
-  final let spacing: CGFloat = 10
-  final let padding: CGFloat = 16
-  
+
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    return spacing
+    return verticalSpacing
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    return .init(top: spacing, left: padding, bottom: spacing, right: padding)
+    return .init(top: verticalSpacing, left: horizontalSpacing, bottom: verticalSpacing, right: horizontalSpacing)
   }
 }

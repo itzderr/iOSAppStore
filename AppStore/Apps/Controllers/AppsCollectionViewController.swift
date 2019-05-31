@@ -31,8 +31,6 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
     return cell
   }
   
-  // MARK: - collection view delegate
-  
   override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
     
     let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header", for: indexPath)
@@ -40,14 +38,18 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
     return headerView
   }
   
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-    return .init(width: view.frame.width, height: 300)
-  }
+  // MARK: - collection view delegate
   
   // MARK: - collection view flowlayout delegate
   
+  final let itemHeight: CGFloat = 300
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    return .init(width: view.frame.width, height: itemHeight)
+  }
+  
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return .init(width: view.frame.width, height: 300)
+    return .init(width: view.frame.width, height: itemHeight)
   }
   
 }

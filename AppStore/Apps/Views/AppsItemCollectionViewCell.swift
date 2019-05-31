@@ -10,36 +10,39 @@ import UIKit
 
 class AppsItemCollectionViewCell: UICollectionViewCell {
   
+  // MARK: - properties
+  
   let appIconImageView: UIImageView = {
-    let iv = UIImageView()
+    let iv = UIImageView(cornerRadius: 16)
     iv.backgroundColor = UIColor.brown
     iv.constraintWidth(equalToConstant: 64)
     iv.constraintHeight(equalToConstant: 64)
-    iv.layer.cornerRadius = 16
-    iv.clipsToBounds = true
-    
     return iv
   }()
   
-  let appTitleLabel = UILabel(text: "AppName", font: .systemFont(ofSize: 20), textColor: .black)
+  let appTitleLabel = UILabel(text: "AppName",
+                              font: .systemFont(ofSize: 20),
+                              textColor: .black)
   
-  let categoryLabel = UILabel(text: "Entertainment", font: .systemFont(ofSize: 12), textColor: .gray)
+  let categoryLabel = UILabel(text: "Entertainment",
+                              font: .systemFont(ofSize: 12),
+                              textColor: .gray)
   
-  let getButton: UIButton = UIButton.getButton()
+  let getButton: UIButton = UIButton.appleGetButton()
+  
+  // MARK: - initializers
   
   override init(frame: CGRect) {
     super.init(frame: frame)
     
-    let vStackView = UIStackView(arrangedSubviews: [appTitleLabel, categoryLabel])
-    vStackView.axis = .vertical
-    
-    let hStackView = UIStackView(arrangedSubviews: [
-      appIconImageView,
-      vStackView,
-      getButton
+    let vStackView = VerticalStackView(arrangedSubviews: [
+      appTitleLabel,
+      categoryLabel
       ])
-    hStackView.alignment = .center
-    hStackView.spacing = 16
+    
+    let hStackView = HorizontalStackView(arrangedSubviews: [appIconImageView, vStackView, getButton],
+                                         spacing: 16,
+                                         alignment: .center)
     
     addSubview(hStackView)
     hStackView.matchParent()
