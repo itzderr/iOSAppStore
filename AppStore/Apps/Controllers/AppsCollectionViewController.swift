@@ -96,9 +96,8 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! AppsGroupCollectionViewCell
     let appGroup = appGroups[indexPath.item]
-    cell.categoryLabel.text = appGroup.feed.title
-    cell.appsHorizontalController.appGroup = appGroup
-    cell.appsHorizontalController.collectionView.reloadData()
+    cell.appGroup = appGroup
+    
     return cell
   }
   

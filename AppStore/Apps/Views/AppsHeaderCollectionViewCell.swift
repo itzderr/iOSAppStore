@@ -11,9 +11,8 @@ import UIKit
 class AppsHeaderCollectionViewCell: UICollectionViewCell {
   
   // MARK: - properties
-  var headerApp: HeaderApp? {
+  var headerApp: HeaderApp! {
     didSet {
-      guard let headerApp = headerApp else { return }
       categoryLabel.text = headerApp.category
       titleLabel.text = headerApp.title
       descriptionLabel.text = headerApp.summary

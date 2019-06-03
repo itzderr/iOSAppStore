@@ -20,11 +20,9 @@ class MainTabBarController: UITabBarController {
     todayCollectionViewController.tabBarItem.image = UIImage(named: "today")
     
     viewControllers = [
-//      createViewController(viewController: TodayCollectionViewController(), title: "Today", imageName: "today"),
       createViewController(viewController: AppsCollectionViewController(), title: "Apps", imageName: "apps"),
       todayCollectionViewController,
       createViewController(viewController: UIViewController(), title: "Games", imageName: "games"),
-      
       createViewController(viewController: SearchTableViewController(), title: "Search", imageName: "search"),
     ]
   }

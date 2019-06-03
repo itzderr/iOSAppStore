@@ -42,11 +42,8 @@ class AppsHorizontalCollectionViewController: SnappingCollectionViewController, 
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! AppsItemCollectionViewCell
-    let app = appGroup?.feed.results[indexPath.item]
-    
-    cell.appIconImageView.sd_setImage(with: URL(string: app?.artworkUrl100 ?? ""))
-    cell.appTitleLabel.text = app?.name
-    cell.categoryLabel.text = app?.artistName
+    let appResult = appGroup?.feed.results[indexPath.item]
+    cell.appResult = appResult
     
     return cell
   }

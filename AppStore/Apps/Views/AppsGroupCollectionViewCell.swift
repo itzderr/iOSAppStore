@@ -10,7 +10,16 @@ import UIKit
 
 class AppsGroupCollectionViewCell: UICollectionViewCell {
   
-  let categoryLabel = UILabel(text: "Must-Have Apps",
+  // MARK: - properties
+  var appGroup: AppGroup! {
+    didSet {
+      categoryLabel.text = appGroup.feed.title
+      appsHorizontalController.appGroup = appGroup
+      appsHorizontalController.collectionView.reloadData()
+    }
+  }
+  
+  private let categoryLabel = UILabel(text: "Must-Have Apps",
                               font: .boldSystemFont(ofSize: 22),
                               textColor: .black)
   
@@ -23,7 +32,7 @@ class AppsGroupCollectionViewCell: UICollectionViewCell {
     return b
   }()
   
-  let appsHorizontalController = AppsHorizontalCollectionViewController()
+  private let appsHorizontalController = AppsHorizontalCollectionViewController()
   
   private final let padding: CGFloat = 16
   

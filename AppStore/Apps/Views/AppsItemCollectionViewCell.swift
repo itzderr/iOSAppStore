@@ -12,7 +12,15 @@ class AppsItemCollectionViewCell: UICollectionViewCell {
   
   // MARK: - properties
   
-  let appIconImageView: UIImageView = {
+  var appResult: AppResult! {
+    didSet {
+      appIconImageView.sd_setImage(with: URL(string: appResult.artworkUrl100))
+      appTitleLabel.text = appResult.name
+      categoryLabel.text = appResult.artistName
+    }
+  }
+  
+  private let appIconImageView: UIImageView = {
     let iv = UIImageView(cornerRadius: 16)
     iv.backgroundColor = UIColor.brown
     iv.constraintWidth(equalToConstant: 64)
@@ -20,15 +28,15 @@ class AppsItemCollectionViewCell: UICollectionViewCell {
     return iv
   }()
   
-  let appTitleLabel = UILabel(text: "AppName",
+  private let appTitleLabel = UILabel(text: "AppName",
                               font: .systemFont(ofSize: 20),
                               textColor: .black)
   
-  let categoryLabel = UILabel(text: "Entertainment",
+  private let categoryLabel = UILabel(text: "Entertainment",
                               font: .systemFont(ofSize: 12),
                               textColor: .gray)
   
-  let getButton: UIButton = UIButton.appleGetButton()
+  private let getButton: UIButton = UIButton.appleGetButton()
   
   // MARK: - initializers
   

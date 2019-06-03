@@ -12,7 +12,7 @@ class AppsHeaderReusableView: UICollectionReusableView {
   
   // MARK: - properties
   
-  let appHeaderController = AppsHeaderCollectionViewController()
+  private let appHeaderController = AppsHeaderCollectionViewController()
   
   // MARK: - initializers
   
