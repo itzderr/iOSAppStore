@@ -38,4 +38,58 @@ class APIService {
       }
     }.resume() // fires!
   }
+ 
+  func fetchPopularAppsGames(completion: @escaping (AppGroup?, Error?) -> ()) {
+    let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/ios-apps/new-apps-we-love/all/25/explicit.json")!
+    URLSession.shared.dataTask(with: url) { (data, response, error) in
+      
+      if let err = error {
+        completion(nil, err)
+        return
+      }
+      do {
+        guard let data = data else { return }
+        let appGroup = try JSONDecoder().decode(AppGroup.self, from: data)
+        completion(appGroup, nil)
+      } catch {
+        completion(nil, error)
+      }
+    }.resume()
+  }
+  
+  func fetchTopFreeApps(completion: @escaping (AppGroup?, Error?) -> ()) {
+    let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/25/explicit.json")!
+    URLSession.shared.dataTask(with: url) { (data, response, error) in
+      
+      if let err = error {
+        completion(nil, err)
+        return
+      }
+      do {
+        guard let data = data else { return }
+        let appGroup = try JSONDecoder().decode(AppGroup.self, from: data)
+        completion(appGroup, nil)
+      } catch {
+        completion(nil, error)
+      }
+      }.resume()
+  }
+  
+  func fetchTopPaidApps(completion: @escaping (AppGroup?, Error?) -> ()) {
+    let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-paid/all/25/explicit.json")!
+    URLSession.shared.dataTask(with: url) { (data, response, error) in
+      
+      if let err = error {
+        completion(nil, err)
+        return
+      }
+      do {
+        guard let data = data else { return }
+        let appGroup = try JSONDecoder().decode(AppGroup.self, from: data)
+        completion(appGroup, nil)
+      } catch {
+        completion(nil, error)
+      }
+      }.resume()
+  }
 }

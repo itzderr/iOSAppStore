@@ -45,7 +45,7 @@ class AppsItemCollectionViewCell: UICollectionViewCell {
                                          alignment: .center)
     
     addSubview(hStackView)
-    hStackView.matchParent()
+    hStackView.matchParent(padding: .init(top: 0, left: 0, bottom: 0, right: 0))
   }
   
   required init?(coder aDecoder: NSCoder) {

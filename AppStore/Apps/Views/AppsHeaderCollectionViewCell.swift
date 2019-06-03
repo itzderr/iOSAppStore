@@ -11,20 +11,29 @@ import UIKit
 class AppsHeaderCollectionViewCell: UICollectionViewCell {
   
   // MARK: - properties
+  var headerApp: HeaderApp? {
+    didSet {
+      guard let headerApp = headerApp else { return }
+      categoryLabel.text = headerApp.category
+      titleLabel.text = headerApp.title
+      descriptionLabel.text = headerApp.summary
+      appImageView.image = UIImage(named: headerApp.posterImage)
+    }
+  }
   
-  let categoryLabel = UILabel(text: "WHAT TO WATCH",
+  private let categoryLabel = UILabel(text: "WHAT TO WATCH",
                               font: .boldSystemFont(ofSize: 10),
                               textColor: .systemBlue)
   
-  let titleLabel = UILabel(text: "Sportsnet",
+  private let titleLabel = UILabel(text: "Sportsnet",
                            font: .systemFont(ofSize: 18),
                            textColor: .black)
   
-  let descriptionLabel = UILabel(text: "Watch the Finals live",
+  private let descriptionLabel = UILabel(text: "Watch the Finals live",
                                  font: .systemFont(ofSize: 18),
                                  textColor: .gray)
   
-  let appImageView: UIImageView = {
+  private let appImageView: UIImageView = {
     let iv = UIImageView(cornerRadius: 16)
     iv.backgroundColor = .green
     return iv

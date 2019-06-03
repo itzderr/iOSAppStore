@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
+class AppsHorizontalCollectionViewController: SnappingCollectionViewController, UICollectionViewDelegateFlowLayout {
   
   // MARK: - constants
   
@@ -17,12 +17,16 @@ class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICo
   private final let horizontalSpacing: CGFloat = 16
   private final let numRows: CGFloat = 3
   
+  // MARK: - properties
+  
+  var appGroup: AppGroup?
+  
   // MARK: - lifecycle methods
   
   override func viewDidLoad() {
     super.viewDidLoad()
     collectionView.backgroundColor = .white
-    
+    collectionView.decelerationRate = .fast
     collectionView.register(AppsItemCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
     
     let layout = collectionViewLayout as! UICollectionViewFlowLayout
@@ -33,11 +37,16 @@ class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICo
   // MARK: - CollectionView data source
   
   override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 10
+    return appGroup?.feed.results.count ?? 0
   }
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! AppsItemCollectionViewCell
+    let app = appGroup?.feed.results[indexPath.item]
+    
+    cell.appIconImageView.sd_setImage(with: URL(string: app?.artworkUrl100 ?? ""))
+    cell.appTitleLabel.text = app?.name
+    cell.categoryLabel.text = app?.artistName
     
     return cell
   }
@@ -53,7 +62,7 @@ class AppsHorizontalCollectionViewController: BaseCollectionViewController, UICo
   }
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    return verticalSpacing
+    return horizontalSpacing / 2
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

@@ -8,7 +8,16 @@
 
 import UIKit
 
-class AppsHeaderCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
+class AppsHeaderCollectionViewController: SnappingCollectionViewController, UICollectionViewDelegateFlowLayout {
+  
+  // MARK: - variables
+  private let headerApps = [
+    HeaderApp(category: "WHAT TO WATCH", title: "Sportsnet", summary: "Watch the Finals live", posterImage: "Sportsnet"),
+    HeaderApp(category: "WATCH IT LIVE", title: "DAZN Live Sports Streaming", summary: "Champoions League Final", posterImage: "DAZN"),
+    HeaderApp(category: "NEW APP", title: "Poshmark", summary: "Buy and sell in Canada", posterImage: "Poshmark"),
+    HeaderApp(category: "GET FIT", title: "MyFitnessPal", summary: "Meal plan like a champ", posterImage: "MyFitnessPal"),
+    HeaderApp(category: "MAJOR UPDATE", title: "Ulysses", summary: "Now supporting Ghost Publishing", posterImage: "Ulysses")
+  ]
   
   // MARK: - constants
   
@@ -20,6 +29,7 @@ class AppsHeaderCollectionViewController: BaseCollectionViewController, UICollec
     super.viewDidLoad()
     
     collectionView.backgroundColor = .white
+    collectionView.decelerationRate = .fast
     let layout = collectionViewLayout as! UICollectionViewFlowLayout
     layout.scrollDirection = .horizontal
     
@@ -29,12 +39,12 @@ class AppsHeaderCollectionViewController: BaseCollectionViewController, UICollec
   // MARK: - collection view data source
   
   override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 5
+    return headerApps.count
   }
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "headerCell", for: indexPath) as! AppsHeaderCollectionViewCell
-    
+    cell.headerApp = headerApps[indexPath.item]
     return cell
   }
   // MARK: - collection view delegate
@@ -43,6 +53,10 @@ class AppsHeaderCollectionViewController: BaseCollectionViewController, UICollec
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return .init(width: view.frame.width - horizontalSpacing * 2, height: view.frame.height)
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    return horizontalSpacing / 2
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

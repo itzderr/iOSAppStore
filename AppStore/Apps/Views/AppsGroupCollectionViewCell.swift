@@ -14,7 +14,7 @@ class AppsGroupCollectionViewCell: UICollectionViewCell {
                               font: .boldSystemFont(ofSize: 22),
                               textColor: .black)
   
-  let seeAllButton: UIButton = {
+  private let seeAllButton: UIButton = {
     let b = UIButton(type: .system)
     b.translatesAutoresizingMaskIntoConstraints = false
     b.setTitle("See All", for: .normal)
@@ -25,6 +25,8 @@ class AppsGroupCollectionViewCell: UICollectionViewCell {
   
   let appsHorizontalController = AppsHorizontalCollectionViewController()
   
+  private final let padding: CGFloat = 16
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     let hStackView = HorizontalStackView(arrangedSubviews: [categoryLabel, seeAllButton])
@@ -32,9 +34,9 @@ class AppsGroupCollectionViewCell: UICollectionViewCell {
     addSubview(hStackView)
     addSubview(appsHorizontalController.view)
     
-    hStackView.anchors(topAnchor: topAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: nil, padding: .init(top: 16, left: 16, bottom: 0, right: 20))
+    hStackView.anchors(topAnchor: topAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: nil, padding: .init(top: padding, left: padding, bottom: 0, right: padding * 2))
     
-    appsHorizontalController.view.anchors(topAnchor: hStackView.bottomAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: bottomAnchor)
+    appsHorizontalController.view.anchors(topAnchor: hStackView.bottomAnchor, leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, bottomAnchor: bottomAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0))
   }
   
   required init?(coder aDecoder: NSCoder) {
