@@ -48,7 +48,7 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
     // DispatchGroup: helps you to sync your data response
     let dispatchGroup = DispatchGroup()
     dispatchGroup.enter()
-    APIService.shared.fetchAppGroup(url: .popularAppsGames) { (appGroup: AppGroup?, error) in
+    APIService.shared.fetchAppGroup(url: APIEndPoint.popularAppsGames) { (appGroup: AppGroup?, error) in
       if let err = error {
         print("Error fetching apps:", err)
         return
@@ -58,7 +58,7 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
     }
     
     dispatchGroup.enter()
-    APIService.shared.fetchAppGroup(url: .topFreeApps) { (appGroup: AppGroup?, error) in
+    APIService.shared.fetchAppGroup(url: APIEndPoint.topFreeApps) { (appGroup: AppGroup?, error) in
       if let err = error {
         print("Error fetching apps:", err)
         return
@@ -68,7 +68,7 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
     }
     
     dispatchGroup.enter()
-    APIService.shared.fetchAppGroup(url: .topFreeApps) { (appGroup: AppGroup?, error) in
+    APIService.shared.fetchAppGroup(url: APIEndPoint.topFreeApps) { (appGroup: AppGroup?, error) in
       if let err = error {
         print("Error fetching apps:", err)
         return

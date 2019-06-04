@@ -55,13 +55,13 @@ class SearchSuggestionTableViewController: UITableViewController {
   }
   
   func fetchSearchResultApps(searchTerm: String) {
-    APIService.shared.fetchSearchResultApps(searchTerm: searchTerm) { [weak self] (results, err) in
+    APIService.shared.fetchSearchResultApps(searchTerm: searchTerm) { [weak self] (searchResult, err) in
       if let err = err {
         print("Failed to fetch apps: ", err)
         return
       }
       
-      self?.searchTerms = results
+      self?.searchTerms = searchResult?.results ?? []
       DispatchQueue.main.async {
         self?.tableView.reloadData()
       }
