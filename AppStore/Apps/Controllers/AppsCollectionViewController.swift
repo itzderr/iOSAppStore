@@ -35,54 +35,54 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
     
     view.addSubview(indicatorView)
     indicatorView.matchParent()
-    fetchData()
+    fetchAppGroups()
   }
   
   private var appGroups = [AppGroup]()
   
-  func fetchData() {
-    var appGroup1: AppGroup?
-    var appGroup2: AppGroup?
-    var appGroup3: AppGroup?
+  private func fetchAppGroups() {
+    var appGroupPopular: AppGroup?
+    var appGroupTopFree: AppGroup?
+    var appGroupTopPaid: AppGroup?
     
     // DispatchGroup: helps you to sync your data response
     let dispatchGroup = DispatchGroup()
     dispatchGroup.enter()
-    APIService.shared.fetchPopularAppsGames { (appGroup, error) in
+    APIService.shared.fetchAppGroup(url: .popularAppsGames) { (appGroup: AppGroup?, error) in
       if let err = error {
         print("Error fetching apps:", err)
         return
       }
-      appGroup1 = appGroup
+      appGroupPopular = appGroup
       dispatchGroup.leave() // completed
     }
     
     dispatchGroup.enter()
-    APIService.shared.fetchTopFreeApps { (appGroup, error) in
+    APIService.shared.fetchAppGroup(url: .topFreeApps) { (appGroup: AppGroup?, error) in
       if let err = error {
         print("Error fetching apps:", err)
         return
       }
-      appGroup2 = appGroup
+      appGroupTopFree = appGroup
       dispatchGroup.leave()
     }
     
     dispatchGroup.enter()
-    APIService.shared.fetchTopPaidApps { (appGroup, error) in
+    APIService.shared.fetchAppGroup(url: .topFreeApps) { (appGroup: AppGroup?, error) in
       if let err = error {
         print("Error fetching apps:", err)
         return
       }
-      appGroup3 = appGroup
+      appGroupTopPaid = appGroup
       dispatchGroup.leave()
     }
     
     // notify we're completely done
     dispatchGroup.notify(queue: .main) {
       self.indicatorView.stopAnimating()
-      self.appGroups.append(appGroup1!)
-      self.appGroups.append(appGroup2!)
-      self.appGroups.append(appGroup3!)
+      self.appGroups.append(appGroupPopular!)
+      self.appGroups.append(appGroupTopFree!)
+      self.appGroups.append(appGroupTopPaid!)
       self.collectionView.reloadData()
     }
   }
