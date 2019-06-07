@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TodayFullScreenViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
+class TodayFullScreenViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
   
   // MARK: - constants
   
@@ -27,7 +27,6 @@ class TodayFullScreenViewController: BaseCollectionViewController, UICollectionV
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    setupCollectionViewLayout()
     setupCollectionView()
   }
   
@@ -37,17 +36,19 @@ class TodayFullScreenViewController: BaseCollectionViewController, UICollectionV
   
   // MARK: - Initializers
   
+  init() {
+    super.init(collectionViewLayout: StaticHeaderLayout())
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   deinit {
     print("\(String(describing: self)) \(#function)")
   }
   
   // MARK: - helper methods
-  
-  private func setupCollectionViewLayout() {
-//    if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-//      layout.sectionInset = .init(top: padding, left: padding, bottom: padding, right: padding)
-//    }
-  }
   
   private func setupCollectionView() {
     collectionView.backgroundColor = .white
@@ -92,6 +93,7 @@ class TodayFullScreenViewController: BaseCollectionViewController, UICollectionV
 // MARK: - ScrollView delegate methods
 
 extension TodayFullScreenViewController {
+  // Prevent scrolling when the offset < 0, start shrinking instead
   override func scrollViewDidScroll(_ scrollView: UIScrollView) {
     // collectionView and tableView are scrollView subclasses
     if scrollView.contentOffset.y < 0 {

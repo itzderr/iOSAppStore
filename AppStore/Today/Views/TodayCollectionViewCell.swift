@@ -37,6 +37,7 @@ class TodayCollectionViewCell: UICollectionViewCell {
                                                   textColor: UIColor(white: 0.4, alpha: 1.0))
   
   // MARK: - cell press animation
+  
   override var isHighlighted: Bool {
     didSet {
       var transform: CGAffineTransform = .identity
