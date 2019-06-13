@@ -10,13 +10,12 @@ import UIKit
 
 class TodayFullScreenHeaderView: UICollectionReusableView {
   
-  let todayCVCell = TodayCollectionViewCell()
+  let cardView = TodayCardView(frame: .zero)
   
   override init(frame: CGRect) {
-    super.init(frame: frame)
-    let todayCVCCellView = todayCVCell.contentView
-    addSubview(todayCVCCellView)
-    todayCVCCellView.matchParent()
+    super.init(frame: frame)  
+    addSubview(cardView)
+    cardView.matchParent()
   }
   
   required init?(coder aDecoder: NSCoder) {

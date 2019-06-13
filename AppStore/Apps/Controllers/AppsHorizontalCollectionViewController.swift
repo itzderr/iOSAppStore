@@ -12,10 +12,10 @@ class AppsHorizontalCollectionViewController: SnappingCollectionViewController, 
   
   // MARK: - constants
   
-  private final let cellIdentifier = "HorizontalAppsCell"
-  private final let verticalSpacing: CGFloat = 10
-  private final let horizontalSpacing: CGFloat = 16
-  private final let numRows: CGFloat = 3
+  private let cellIdentifier = "HorizontalAppsCell"
+  private let verticalSpacing: CGFloat = 10
+  private let horizontalSpacing: CGFloat = 16
+  private let numRows: CGFloat = 3
   
   // MARK: - properties
   

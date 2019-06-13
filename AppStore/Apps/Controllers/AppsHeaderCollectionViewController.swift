@@ -21,7 +21,7 @@ class AppsHeaderCollectionViewController: SnappingCollectionViewController, UICo
   
   // MARK: - constants
   
-  private final let horizontalSpacing: CGFloat = 16
+  private let horizontalSpacing: CGFloat = 16
   
   // MARK: - life cycle methods
   

@@ -10,6 +10,10 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
   
+  override var prefersStatusBarHidden: Bool {
+    return true
+  }
+  
   // MARK: - Life cycle Methods
   
   override func viewDidLoad() {

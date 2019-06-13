@@ -12,9 +12,9 @@ class AppsCollectionViewController: BaseCollectionViewController, UICollectionVi
   
   // MARK: - constants
   
-  private final let cellIdentifier = "AppsHeaderCell"
-  private final let headerIdentifier = "AppsGroupCell"
-  private final let itemHeight: CGFloat = 300
+  private let cellIdentifier = "AppsHeaderCell"
+  private let headerIdentifier = "AppsGroupCell"
+  private let itemHeight: CGFloat = 300
   
   private let indicatorView: UIActivityIndicatorView = {
     let i = UIActivityIndicatorView(style: .whiteLarge)

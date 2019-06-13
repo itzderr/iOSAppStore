@@ -26,7 +26,7 @@ class SearchTableViewController: UITableViewController {
   
   // MARK: - Constants
   
-  private final let cellId = "trendingCell"
+  private let cellId = "trendingCell"
   private let trendings = ["Instagram", "Facebook", "Tinder", "Snapchat", "Google"]
   
   // MARK: - View Life Cycle

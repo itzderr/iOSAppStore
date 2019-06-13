@@ -14,27 +14,11 @@ class TodayCollectionViewCell: UICollectionViewCell {
   
   var todayItem: TodayItem! {
     didSet {
-      cellImageView.image = todayItem.image
-      categoryLabel.text = todayItem.category
-      titleLabel.text = todayItem.title
-      descriptionLabel.text = todayItem.description
+      cardView.todayItem = todayItem
     }
   }
-
-  private let cellImageView: UIImageView = {
-    let iv = UIImageView(image: #imageLiteral(resourceName: "Lab4Physics"))
-    iv.contentMode = .scaleToFill
-    iv.constraintHeight(equalToConstant: 300)
-    return iv
-  }()
   
-  private let categoryLabel: UILabel = UILabel(font: .boldSystemFont(ofSize: 16),
-                                               textColor: UIColor(white: 0.5, alpha: 0.7))
-  
-  private let titleLabel: UILabel = UILabel(font: .boldSystemFont(ofSize: 24))
-  
-  private let descriptionLabel: UILabel = UILabel(font: .systemFont(ofSize: 14),
-                                                  textColor: UIColor(white: 0.4, alpha: 1.0))
+  lazy var cardView = TodayCardView(frame: .zero)
   
   // MARK: - cell press animation
   
@@ -59,17 +43,8 @@ class TodayCollectionViewCell: UICollectionViewCell {
     contentView.layer.cornerRadius = 16
     contentView.clipsToBounds = true
     
-    let labelStackView = VerticalStackView(arrangedSubviews: [
-      categoryLabel,
-      titleLabel,
-      descriptionLabel,
-      ], spacing: 0, distribution: .equalSpacing)
-    
-    contentView.addSubview(cellImageView)
-    contentView.addSubview(labelStackView)
-    
-    cellImageView.anchors(topAnchor: contentView.topAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil)
-    labelStackView.anchors(topAnchor: cellImageView.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor, padding: .init(top: 8, left: 8, bottom: 8, right: 8))
+    contentView.addSubview(cardView)
+    cardView.matchParent()
     setShadow()
   }
   

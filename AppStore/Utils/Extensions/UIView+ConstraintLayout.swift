@@ -69,4 +69,13 @@ extension UIView {
     translatesAutoresizingMaskIntoConstraints = false
     self.heightAnchor.constraint(equalToConstant: equalToConstant).isActive = true
   }
+  
+  func matchSize() {
+    if let superWidthAnchor = superview?.widthAnchor {
+      self.widthAnchor.constraint(equalTo: superWidthAnchor).isActive = true
+    }
+    if let superHeightAnchor = superview?.heightAnchor {
+      self.heightAnchor.constraint(equalTo: superHeightAnchor).isActive = true
+    }
+  }
 }

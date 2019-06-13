@@ -34,7 +34,7 @@ class AppsGroupCollectionViewCell: UICollectionViewCell {
   
   private let appsHorizontalController = AppsHorizontalCollectionViewController()
   
-  private final let padding: CGFloat = 16
+  private let padding: CGFloat = 16
   
   override init(frame: CGRect) {
     super.init(frame: frame)

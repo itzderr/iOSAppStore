@@ -8,97 +8,126 @@
 
 import UIKit
 
-class TodayFullScreenViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class TodayFullScreenViewController: UIViewController {
   
   // MARK: - constants
   
-  private final let cellIdentifier = "DetailsCell"
-  private final let headerIdentifier = "HeaderCell"
-  private final let horizontalSpacing: CGFloat = 12
-  private final let cornerRadius: CGFloat = 16
-  private final let itemHeight: CGFloat = 400
+  private let itemHeight: CGFloat = 400
+  
+  private let mainScrollView: UIScrollView = {
+    let sv = UIScrollView(frame: .zero)
+    sv.contentInsetAdjustmentBehavior = .never // no insets
+    sv.scrollIndicatorInsets = UIEdgeInsets(top: 400, left: 0, bottom: 0, right: 0)
+    return sv
+  }()
+  
+  private let todayCardView = TodayCardView(frame: .zero)
+  
+  private let descriptionLabel: UILabel = {
+    let label = UILabel()
+    let attributedText = NSMutableAttributedString(string: "Learning about science can always be more fun.", attributes: [.foregroundColor: UIColor.black, .font: UIFont.boldSystemFont(ofSize: 18) ])
+    
+    attributedText.append(NSAttributedString(string: " That was the idea that Komal Dadlani, CEO and co-founder of the Chilean studio Lab4U had in mind when studying biochemistry at the University of Chile.\n\n\"You cannot learn to ride a bicycle by reading a book, you have to live the experience and ride the bicycle. The same happens with science,\" she says.\n\nThe solution? Leverage the built-in features of the iPhone and iPad to enable teachers to improve their physics lessons through experiments. The accelerometer, microphone and camera are features often used by games and photography apps, but they're also really useful in science education\n\n Do you want to figure out the difference between distance and displacement? Jump on the \"You've Got the Moves\" experiment. Just start walking with your device and the Lab4Physics app will build a reference system that, through graphics, will show you the difference.\n\nIf you want to know what a sound wave looks like, try experiment \"So Wavy\" with Marie Curie. Whistle close to the speaker and you'll see the sound's shape in an amptitude vs. time graphic.\n\nThere are multiple experiments for you to discover the principles of physics, beyond the books. Just a little warning: the activities are designed for children over 13. For teachers, the app includes support materials designed to bring the app's experiments into their classes. \"Talent is universal, but not the opportunities. We want to democratize science by enabling both teachers and students to have a laboratory in their pockets,\" says Dadlani.", attributes: [.foregroundColor: UIColor.gray]))
+    
+    label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+    label.attributedText = attributedText
+    label.numberOfLines = 0 // infinite lines
+    
+    return label
+  }()
   
   // MARK: - variables
   
-  var todayItem: TodayItem?
-  var dismissController: (() -> ())?
+  var todayItem: TodayItem? {
+    didSet {
+      todayCardView.todayItem = todayItem
+    }
+  }
+  // status bar animation
+  var statusBarHidden = false
+  override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+    return .slide
+  }
+  override var prefersStatusBarHidden: Bool {
+    return statusBarHidden
+  }
   
   // MARK: - view controller life cylces
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    setupCollectionView()
-  }
-  
-  @objc private func handleDismiss(gesture: UIGestureRecognizer) {
-    dismissController?()
-  }
-  
-  // MARK: - Initializers
-  
-  init() {
-    super.init(collectionViewLayout: StaticHeaderLayout())
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
-  deinit {
-    print("\(String(describing: self)) \(#function)")
+    setupUI()
+    setupPanGestureRecognizer()
   }
   
   // MARK: - helper methods
   
-  private func setupCollectionView() {
-    collectionView.backgroundColor = .white
-    collectionView.layer.cornerRadius = cornerRadius
-    collectionView.contentInsetAdjustmentBehavior = .never // no insets
+  private func setupUI() {
+    view.clipsToBounds = true
+    view.backgroundColor = .white
+    view.addSubview(mainScrollView)
+    mainScrollView.matchParent()
     
-    collectionView.register(TodayFullScreenDetailsCell.self, forCellWithReuseIdentifier: cellIdentifier)
-    collectionView.register(TodayFullScreenHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
-  }
-  
-  // MARK: - Collection view data source
-  
-  override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-    let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! TodayFullScreenHeaderView
-    header.todayCVCell.todayItem = todayItem
-    header.todayCVCell.backgroundView = nil
-    return header
-  }
-  
-  override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 1
-  }
-  
-  override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! TodayFullScreenDetailsCell
+    let cardWrapperView = UIView()
+    mainScrollView.addSubview(cardWrapperView)
+    cardWrapperView.anchors(topAnchor: mainScrollView.topAnchor, leadingAnchor: mainScrollView.leadingAnchor, trailingAnchor: mainScrollView.trailingAnchor, bottomAnchor: nil, padding: .zero, size: .init(width: 0, height: itemHeight))
     
-    return cell
-  }
-  
-  // MARK: - Collection view delegate
+    cardWrapperView.addSubview(todayCardView)
+    let todayCardViewTop = todayCardView.topAnchor.constraint(equalTo: cardWrapperView.topAnchor)
+    todayCardViewTop.priority = .init(999)
+    todayCardViewTop.isActive = true
+    todayCardView.leadingAnchor.constraint(equalTo: cardWrapperView.leadingAnchor).isActive = true
+    todayCardView.trailingAnchor.constraint(equalTo: cardWrapperView.trailingAnchor).isActive = true
+    NSLayoutConstraint(item: todayCardView, attribute: .height, relatedBy: .equal, toItem: cardWrapperView, attribute: .height, multiplier: 1, constant: 0).isActive = true
+    NSLayoutConstraint(item: todayCardView, attribute: .top, relatedBy: .lessThanOrEqual, toItem: view, attribute: .top, multiplier: 1, constant: 0).isActive = true
+    
+    mainScrollView.addSubview(descriptionLabel)
+    descriptionLabel.constraintWidth(equalToConstant: view.frame.width - 32)
+    descriptionLabel.anchors(topAnchor: cardWrapperView.bottomAnchor, leadingAnchor: mainScrollView.leadingAnchor, trailingAnchor: mainScrollView.trailingAnchor, bottomAnchor: mainScrollView.bottomAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
 
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-    return .init(width: collectionView.frame.width, height: itemHeight)
-  }
-
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    // TODO: change hardcoded height value (also for animation)
-    return .init(width: collectionView.frame.width - 2 * horizontalSpacing, height: 1000)
   }
 }
 
-// MARK: - ScrollView delegate methods
+// MARK: - UIGestureRecognizerDelegate
 
-extension TodayFullScreenViewController {
-  // Prevent scrolling when the offset < 0, start shrinking instead
-  override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    // collectionView and tableView are scrollView subclasses
-    if scrollView.contentOffset.y < 0 {
-      scrollView.isScrollEnabled = false
+extension TodayFullScreenViewController: UIGestureRecognizerDelegate {
+  
+  private func setupPanGestureRecognizer() {
+    let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragToDismiss))
+    gestureRecognizer.delegate = self
+    view.addGestureRecognizer(gestureRecognizer)
+  }
+  
+  @objc private func dragToDismiss(gesture: UIPanGestureRecognizer) {
+    let contentOffsetY: CGFloat = mainScrollView.contentOffset.y
+    // we do not want to transform when the contentOffset > 0
+    // contentOffsetY == 0 when scrolled to the top
+    if contentOffsetY > 0 { return }
+    
+    let translationY = gesture.translation(in: view).y
+    if gesture.state == .changed {
+      // we do not want to transfrom when scrolling up
+      if translationY > 0 {
+        mainScrollView.showsVerticalScrollIndicator = false
+        mainScrollView.isScrollEnabled = false
+        var scale = 1 - (translationY / 2000)  // translationY value too big
+        // 0.85 <= scale <= 1
+        scale = max(0.85, min(1, scale))
+        view.transform = CGAffineTransform(scaleX: scale, y: scale)
+        view.layer.cornerRadius = (1 - scale) * (16 / 0.15)
+      }
+    } else if gesture.state == .ended {
+      if translationY > 200 {
+        presentingViewController?.dismiss(animated: true, completion: nil)
+      } else {
+        view.transform = .identity
+        mainScrollView.showsVerticalScrollIndicator = true
+        mainScrollView.isScrollEnabled = true
+      }
     }
-    scrollView.isScrollEnabled = true
+  }
+  
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    return true
   }
 }
