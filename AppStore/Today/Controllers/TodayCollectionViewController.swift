@@ -12,10 +12,9 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
   
   // MARK: - Constant
   
-  private final let reuseIdentifier = "todayCell"
-  private final let itemHeight: CGFloat = 400
-  private final let itemSpacing: CGFloat = 24
-  private final let cornerRadius: CGFloat = 16
+  private let reuseIdentifier = "todayCell"
+  private let itemHeight: CGFloat = 400
+  private let itemSpacing: CGFloat = 24
   
   // MARK: - Variables
   
@@ -23,20 +22,12 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
     TodayItem(image: UIImage(named: "Lab4Physics")!, category: "FEATURED APP", title: "Lab4Physics", description: "A Lab in Your Pocket"),
     TodayItem(image: UIImage(named: "GetYourGuide")!, category: "FEATURED APP", title: "Your Insider Travel Guide", description: "GetYourGuide helps you vacation smarter"),
   ]
-  private var startFrame: CGRect! // initial cell frame
-  private var fullScreenController: TodayFullScreenViewController!
-  private var cellConstraints: AnchoredConstraints! // constraints for animation
+  var selectedCell: TodayCollectionViewCell?
   
-  // blur background visual effect
-  private let blurVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-  
-  // status bar animation
-  private var statusBarHidden = false
-  
+  var statusBarHidden = false
   override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
     return .slide
   }
-  
   override var prefersStatusBarHidden: Bool {
     return statusBarHidden
   }
@@ -45,10 +36,6 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.addSubview(blurVisualEffectView)
-    blurVisualEffectView.matchParent()
-    blurVisualEffectView.alpha = 0
-    
     collectionView.backgroundColor = .white
     collectionView.register(TodayCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
   }
@@ -70,9 +57,8 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
   // MARK: - UICollectionViewDelegate
   
   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
-    setupTodayFullScreenController(indexPath)
-    showTodayFullScreenViewController()
+    selectedCell = collectionView.cellForItem(at: indexPath) as? TodayCollectionViewCell
+    presentTodayFullScreenController(indexPath)
   }
   
   // MARK: - UICollectionViewDelegateFlowLayout
@@ -99,105 +85,34 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
     return startFrame
   }
   
-  private func setupTodayFullScreenController(_ indexPath: IndexPath) {
-    fullScreenController = TodayFullScreenViewController()
-    
+  private func presentTodayFullScreenController(_ indexPath: IndexPath) {
+    let fullScreenController = TodayFullScreenViewController()
     fullScreenController.todayItem = todayItems[indexPath.item]
-    fullScreenController.dismissController = {
-      self.removeFullScreenView()
-    }
-    
-    let fullScreenView = fullScreenController.view!
-    fullScreenView.translatesAutoresizingMaskIntoConstraints = false
-    fullScreenView.layer.cornerRadius = cornerRadius
-    view.addSubview(fullScreenView)
-    addChild(fullScreenController)
-    
-    collectionView.isUserInteractionEnabled = false // no interaction when selecting
-    startFrame = getStartingFrameOfCell(at: indexPath)
-    
-    // constraints animation
-    cellConstraints = fullScreenView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: nil, bottomAnchor: nil, padding: .init(top: startFrame.origin.y, left: startFrame.origin.x, bottom: 0, right: 0), size: .init(width: startFrame.width, height: startFrame.height))
-
-    view.layoutIfNeeded()
-    setupPanGestureRecognizer()
-  }
-
-  private func showTodayFullScreenViewController() {
-    UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: { [unowned self] in
-      self.blurVisualEffectView.alpha = 1
-      self.cellConstraints?.top?.constant = 0
-      self.cellConstraints?.leading?.constant = 0
-      self.cellConstraints?.width?.constant = self.view.frame.width
-      self.cellConstraints?.height?.constant = self.view.frame.height
-      
-      self.statusBarHidden = !self.statusBarHidden
-      self.setNeedsStatusBarAppearanceUpdate()
-      self.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
-      self.view.layoutIfNeeded() // starts animation
-      }, completion: nil)
-  }
-  
-  private func removeFullScreenView() {
-    UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: { [unowned self] in
-      self.blurVisualEffectView.alpha = 0
-      // drag to dismiss changes transform property
-      self.fullScreenController.view.transform = .identity
-      // when removing from the bottom, bring the collectionView back on top
-      self.fullScreenController.collectionView.contentOffset = .zero
-      
-      self.cellConstraints?.top?.constant = self.startFrame.origin.y
-      self.cellConstraints?.leading?.constant = self.startFrame.origin.x
-      self.cellConstraints?.width?.constant = self.startFrame.width
-      self.cellConstraints?.height?.constant = self.startFrame.height
-      
-      // status bar animation
-      self.statusBarHidden = !self.statusBarHidden
-      self.setNeedsStatusBarAppearanceUpdate()
-      self.tabBarController?.tabBar.transform = .identity
-      self.view.layoutIfNeeded()
-      
-    }) { [unowned self](_) in
-      self.fullScreenController.remove()
-      self.fullScreenController = nil
-      self.collectionView.isUserInteractionEnabled = true
-    }
+    fullScreenController.transitioningDelegate = self
+    fullScreenController.modalPresentationStyle = .custom
+    fullScreenController.modalPresentationCapturesStatusBarAppearance = true
+    present(fullScreenController, animated: true, completion: nil)
   }
 }
 
-extension TodayCollectionViewController: UIGestureRecognizerDelegate {
-  private func setupPanGestureRecognizer() {
-    let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragToDismiss))
-    gestureRecognizer.delegate = self
-    self.fullScreenController.view.addGestureRecognizer(gestureRecognizer)
+extension TodayCollectionViewController: UIViewControllerTransitioningDelegate {
+  func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    let transition = FillAnimator()
+    transition.originFrame = selectedCell!.superview!.convert(selectedCell!.frame, to: nil)
+    selectedCell?.isHidden = true
+    collectionView.isUserInteractionEnabled = false // no interaction when selecting
+    return transition
   }
   
-  @objc private func dragToDismiss(gesture: UIPanGestureRecognizer) {
-    let contentOffsetY: CGFloat = fullScreenController.collectionView.contentOffset.y
-    // we do not want to transform when the contentOffset > 0
-    // contentOffsetY == 0 when scrolled to the top
-    if contentOffsetY > 0 { return }
-
-    let translationY = gesture.translation(in: fullScreenController.view).y
-    if gesture.state == .changed {
-      // we do not want to transfrom when scrolling up
-      if translationY > 0 {
-        var scale = 1 - (translationY / 2000)  // translationY value too big
-        // 0.85 <= scale <= 1
-        scale = max(0.85, min(1, scale))
-        fullScreenController.view.transform = CGAffineTransform(scaleX: scale, y: scale)
-      }
-    } else if gesture.state == .ended {
-      if translationY > 200 {
-        removeFullScreenView()
-      } else {
-        fullScreenController.view.transform = .identity
-      }
-    }
+  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    let transition = DismissAnimator()
+    transition.originFrame = selectedCell!.superview!.convert(selectedCell!.frame, to: nil)
+    collectionView.isUserInteractionEnabled = true
+    return transition
   }
   
-  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-    return true
+  // set modalPresentationStyle to `.custom` to use this method
+  func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+    return TodayPresentationController(presentedViewController: presented, presenting: presenting)
   }
-  
 }
