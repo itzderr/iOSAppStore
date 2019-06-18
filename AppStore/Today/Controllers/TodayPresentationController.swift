@@ -18,9 +18,8 @@ final class TodayPresentationController: UIPresentationController {
   
   override func presentationTransitionWillBegin() {
     let container = containerView!
-    
+    blurVisualEffectView.frame = CGRect(origin: .zero, size: UIScreen.main.bounds.size)
     container.addSubview(blurVisualEffectView)
-    blurVisualEffectView.matchParent()
     blurVisualEffectView.alpha = 0.0
     
     presentingViewController.beginAppearanceTransition(false, animated: false)

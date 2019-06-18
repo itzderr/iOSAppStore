@@ -29,25 +29,32 @@ class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let todayCVC = toVC.viewControllers![0] as! TodayCollectionViewController
     todayCVC.statusBarHidden = true
     todayCVC.setNeedsStatusBarAppearanceUpdate()
-    
-    let initialFrame = UIScreen.main.bounds
-    let finalFrame = originFrame
-    
-    let xScaleFactor = finalFrame.width / initialFrame.width
-    let yScaleFactor = finalFrame.height / initialFrame.height
-    
     containerView.backgroundColor = .clear
-    containerView.addSubview(fromView)
+    let animatedContainerView = UIView()
+    animatedContainerView.translatesAutoresizingMaskIntoConstraints = false
+    
+    containerView.addSubview(animatedContainerView)
+    animatedContainerView.addSubview(fromView)
+    fromView.matchParent()
+    
+    animatedContainerView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+    let animatedContainerTopConstraint = animatedContainerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0)
+    let animatedContainerWidthConstraint = animatedContainerView.widthAnchor.constraint(equalToConstant: fromView.frame.width)
+    let animatedContainerHeightConstraint = animatedContainerView.heightAnchor.constraint(equalToConstant: fromView.frame.height)
+    NSLayoutConstraint.activate([animatedContainerTopConstraint, animatedContainerWidthConstraint, animatedContainerHeightConstraint])
+    containerView.layoutIfNeeded()
     
     UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.0, animations: {
       todayCVC.statusBarHidden = false
       todayCVC.setNeedsStatusBarAppearanceUpdate()
-      fromView.transform = CGAffineTransform(scaleX: xScaleFactor, y: yScaleFactor)
-      fromView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
-      fromView.layer.cornerRadius = 16 * 2
-      
+      fromView.transform = .identity // because of scale transformation on press
+      animatedContainerTopConstraint.constant = self.originFrame.minY
+      animatedContainerWidthConstraint.constant = self.originFrame.width
+      animatedContainerHeightConstraint.constant = self.originFrame.height
+      containerView.layoutIfNeeded()
     }) { _ in
       transitionContext.completeTransition(true)
+      todayCVC.selectedCell?.isHidden = false
     }
   }
 }

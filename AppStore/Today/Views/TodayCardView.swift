@@ -19,9 +19,9 @@ class TodayCardView: UIView {
     }
   }
   
-  private let cellImageView: UIImageView = {
+  let cellImageView: UIImageView = {
     let iv = UIImageView(image: #imageLiteral(resourceName: "Lab4Physics"))
-    iv.contentMode = .scaleToFill
+    iv.contentMode = .scaleAspectFill
     iv.constraintHeight(equalToConstant: 300)
     return iv
   }()

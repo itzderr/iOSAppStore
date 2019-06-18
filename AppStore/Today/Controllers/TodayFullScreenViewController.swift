@@ -21,7 +21,7 @@ class TodayFullScreenViewController: UIViewController {
     return sv
   }()
   
-  private let todayCardView = TodayCardView(frame: .zero)
+  let todayCardView = TodayCardView(frame: .zero)
   
   private let descriptionLabel: UILabel = {
     let label = UILabel()
@@ -70,21 +70,29 @@ class TodayFullScreenViewController: UIViewController {
     
     let cardWrapperView = UIView()
     mainScrollView.addSubview(cardWrapperView)
-    cardWrapperView.anchors(topAnchor: mainScrollView.topAnchor, leadingAnchor: mainScrollView.leadingAnchor, trailingAnchor: mainScrollView.trailingAnchor, bottomAnchor: nil, padding: .zero, size: .init(width: 0, height: itemHeight))
+    cardWrapperView.anchors(topAnchor: mainScrollView.topAnchor, leadingAnchor: mainScrollView.leadingAnchor, trailingAnchor: mainScrollView.trailingAnchor, bottomAnchor: nil)
+    let cardWrapperHeight = cardWrapperView.heightAnchor.constraint(equalToConstant: 400)
+    cardWrapperHeight.priority = .defaultHigh
+    cardWrapperHeight.isActive = true
     
     cardWrapperView.addSubview(todayCardView)
     let todayCardViewTop = todayCardView.topAnchor.constraint(equalTo: cardWrapperView.topAnchor)
-    todayCardViewTop.priority = .init(999)
+    todayCardViewTop.priority = .defaultHigh
     todayCardViewTop.isActive = true
+    
     todayCardView.leadingAnchor.constraint(equalTo: cardWrapperView.leadingAnchor).isActive = true
     todayCardView.trailingAnchor.constraint(equalTo: cardWrapperView.trailingAnchor).isActive = true
+    
+    NSLayoutConstraint(item: todayCardView, attribute: .width, relatedBy: .equal, toItem: cardWrapperView, attribute: .width, multiplier: 1, constant: 0).isActive = true
     NSLayoutConstraint(item: todayCardView, attribute: .height, relatedBy: .equal, toItem: cardWrapperView, attribute: .height, multiplier: 1, constant: 0).isActive = true
     NSLayoutConstraint(item: todayCardView, attribute: .top, relatedBy: .lessThanOrEqual, toItem: view, attribute: .top, multiplier: 1, constant: 0).isActive = true
     
     mainScrollView.addSubview(descriptionLabel)
-    descriptionLabel.constraintWidth(equalToConstant: view.frame.width - 32)
+    let descriptionLabelWidth = descriptionLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 32)
+    descriptionLabelWidth.priority = .required
+    descriptionLabelWidth.isActive = true
+    
     descriptionLabel.anchors(topAnchor: cardWrapperView.bottomAnchor, leadingAnchor: mainScrollView.leadingAnchor, trailingAnchor: mainScrollView.trailingAnchor, bottomAnchor: mainScrollView.bottomAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
-
   }
 }
 

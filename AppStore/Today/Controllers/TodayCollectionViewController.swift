@@ -22,8 +22,7 @@ class TodayCollectionViewController: BaseCollectionViewController, UICollectionV
     TodayItem(image: UIImage(named: "Lab4Physics")!, category: "FEATURED APP", title: "Lab4Physics", description: "A Lab in Your Pocket"),
     TodayItem(image: UIImage(named: "GetYourGuide")!, category: "FEATURED APP", title: "Your Insider Travel Guide", description: "GetYourGuide helps you vacation smarter"),
   ]
-  private var startFrame: CGRect! // initial cell frame
-  private var selectedCell: TodayCollectionViewCell?
+  var selectedCell: TodayCollectionViewCell?
   
   var statusBarHidden = false
   override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
@@ -100,6 +99,7 @@ extension TodayCollectionViewController: UIViewControllerTransitioningDelegate {
   func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
     let transition = FillAnimator()
     transition.originFrame = selectedCell!.superview!.convert(selectedCell!.frame, to: nil)
+    selectedCell?.isHidden = true
     collectionView.isUserInteractionEnabled = false // no interaction when selecting
     return transition
   }
