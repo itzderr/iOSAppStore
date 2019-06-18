@@ -37,6 +37,8 @@ class FillAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     containerView.backgroundColor = .clear
     containerView.addSubview(toView)
     
+    guard let mainTBC = transitionContext.viewController(forKey: .from) as? MainTabBarController else { return }
+    let fromVC = mainTBC.viewControllers![0]
     guard let toVC = transitionContext.viewController(forKey: .to) as? TodayFullScreenViewController else { return }
     
     UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.0, animations: {
@@ -44,6 +46,7 @@ class FillAnimator: NSObject, UIViewControllerAnimatedTransitioning {
       toVC.setNeedsStatusBarAppearanceUpdate()
       toView.transform = .identity
       toView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
+      fromVC.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
       
     }) { _ in
       transitionContext.completeTransition(true)

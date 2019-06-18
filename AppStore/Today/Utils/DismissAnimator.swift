@@ -51,6 +51,7 @@ class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
       animatedContainerTopConstraint.constant = self.originFrame.minY
       animatedContainerWidthConstraint.constant = self.originFrame.width
       animatedContainerHeightConstraint.constant = self.originFrame.height
+      todayCVC.tabBarController?.tabBar.transform = .identity
       containerView.layoutIfNeeded()
     }) { _ in
       transitionContext.completeTransition(true)
