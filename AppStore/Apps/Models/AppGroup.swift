@@ -17,8 +17,8 @@ struct Feed: Decodable {
   let results: [AppResult]
 }
 
-struct AppResult: Decodable {
-  let artistName: String
-  let name: String
-  let artworkUrl100: String
-}
+  struct AppResult: Decodable {
+    let artistName: String
+    let name: String
+    let artworkUrl100: String
+  }

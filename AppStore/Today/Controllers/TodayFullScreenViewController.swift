@@ -80,9 +80,6 @@ class TodayFullScreenViewController: UIViewController {
     todayCardViewTop.priority = .defaultHigh
     todayCardViewTop.isActive = true
     
-    todayCardView.leadingAnchor.constraint(equalTo: cardWrapperView.leadingAnchor).isActive = true
-    todayCardView.trailingAnchor.constraint(equalTo: cardWrapperView.trailingAnchor).isActive = true
-    
     NSLayoutConstraint(item: todayCardView, attribute: .width, relatedBy: .equal, toItem: cardWrapperView, attribute: .width, multiplier: 1, constant: 0).isActive = true
     NSLayoutConstraint(item: todayCardView, attribute: .height, relatedBy: .equal, toItem: cardWrapperView, attribute: .height, multiplier: 1, constant: 0).isActive = true
     NSLayoutConstraint(item: todayCardView, attribute: .top, relatedBy: .lessThanOrEqual, toItem: view, attribute: .top, multiplier: 1, constant: 0).isActive = true

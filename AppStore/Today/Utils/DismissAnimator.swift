@@ -39,8 +39,8 @@ class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     animatedContainerView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
     let animatedContainerTopConstraint = animatedContainerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0)
-    let animatedContainerWidthConstraint = animatedContainerView.widthAnchor.constraint(equalToConstant: fromView.frame.width)
-    let animatedContainerHeightConstraint = animatedContainerView.heightAnchor.constraint(equalToConstant: fromView.frame.height)
+    let animatedContainerWidthConstraint = animatedContainerView.widthAnchor.constraint(equalToConstant: containerView.frame.width)
+    let animatedContainerHeightConstraint = animatedContainerView.heightAnchor.constraint(equalToConstant: containerView.frame.height)
     NSLayoutConstraint.activate([animatedContainerTopConstraint, animatedContainerWidthConstraint, animatedContainerHeightConstraint])
     containerView.layoutIfNeeded()
     
